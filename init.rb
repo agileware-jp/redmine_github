@@ -1,4 +1,4 @@
-Redmine::Plugin.register :lychee_cost do
+Redmine::Plugin.register :redmine_github do
   name 'Redmine Github plugin'
   author 'Agileware Inc.'
   description 'Redmine plugin for connecting Github'
@@ -6,3 +6,8 @@ Redmine::Plugin.register :lychee_cost do
   author_url 'https://agileware.jp/'
 end
 
+Redmine::Scm::Base.add('GitHub')
+
+ActiveSupport::Reloader.to_prepare do
+  RepositoriesController.helper GitHubHelper
+end
