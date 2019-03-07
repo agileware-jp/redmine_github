@@ -1,8 +1,9 @@
-module GitHubHelper
-  def git_hub_field_tags(form, repository)
+module GithubHelper
+  def github_field_tags(form, repository)
     # FIXME: 汚い
+    # TODO: label
     content_tag('p', form.text_field(
-                :url, :label => l(:field_path_to_repository),
+                :url, :label => l(:field_url),
                 :size => 60, :required => true,
                 :disabled => !repository.safe_attribute?('url')
                          ) + 

@@ -6,8 +6,8 @@ Redmine::Plugin.register :redmine_github do
   author_url 'https://agileware.jp/'
 end
 
-Redmine::Scm::Base.add('GitHub')
+Redmine::Scm::Base.add('Github')
 
-ActiveSupport::Reloader.to_prepare do
-  RepositoriesController.helper GitHubHelper
+RedmineGithub::Reloader.to_prepare do
+  RepositoriesController.helper GithubHelper
 end
