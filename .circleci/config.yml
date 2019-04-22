@@ -44,7 +44,7 @@ orbs:
               name: Setup Redmine << parameters.redmine_version >>
               working_directory: ~/redmine-<< parameters.redmine_version >>
               command: |
-                bundle check || bundle install --without development rmagick
+                bundle check || bundle install --without rmagick
           - save_cache:
               key: '{{ .Environment.CACHE_VERSION }}-redmine-setup-<< parameters.ruby_version >>-<< parameters.redmine_version >>-<< parameters.db >>-{{ checksum "Gemfile.local" }}'
               paths:
