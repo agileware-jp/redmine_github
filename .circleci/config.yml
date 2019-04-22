@@ -69,7 +69,7 @@ executors:
         type: string
     docker:
       - image: circleci/ruby:<< parameters.ruby_version >>-node-browsers
-      - image: circleci/postgres:9.2
+      - image: circleci/postgres:latest
   ruby-mariadb:
     parameters:
       ruby_version:
