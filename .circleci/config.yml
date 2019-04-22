@@ -160,13 +160,22 @@ workflows:
   test:
     jobs:
       - rspec:
-          name: 'Ruby 2.4 Redmine 3.4.4 PostgreSQL'
+          name: 'Ruby 2.4 Redmine 3.4.10 PostgreSQL'
           db: pg
-          redmine_version: '3.4.4'
+          redmine_version: '3.4.10'
           ruby_version: '2.4'
       - rspec:
-          name: 'Ruby 2.4 Redmine 3.4.4 MariaDB'
+          name: 'Ruby 2.4 Redmine 3.4.10 MariaDB'
           db: mariadb
-          redmine_version: '3.4.4'
+          redmine_version: '3.4.10'
           ruby_version: '2.4'
-
+      - rspec:
+          name: 'Ruby 2.4 Redmine 4.0.3 PostgreSQL'
+          db: pg
+          redmine_version: '4.0.3'
+          ruby_version: '2.4'
+      - rspec:
+          name: 'Ruby 2.4 Redmine 4.0.3 MariaDB'
+          db: mariadb
+          redmine_version: '4.0.3'
+          ruby_version: '2.4'
