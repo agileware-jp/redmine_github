@@ -130,7 +130,7 @@ jobs:
           name: Run Rubocop
           working_directory: ~/redmine-<< parameters.redmine_version >>
           command: |
-            bundle exec rubocop --format simple --config plugins/<< parameters.redmine_plugin >>/.rubocop.yml ./plugins/<< parameters.redmine_plugin >>
+            bundle exec rubocop --format simple --fail-level E --config plugins/<< parameters.redmine_plugin >>/.rubocop.yml ./plugins/<< parameters.redmine_plugin >>
       - run:
           name: Setup RSpec
           working_directory: ~/redmine-<< parameters.redmine_version >>
