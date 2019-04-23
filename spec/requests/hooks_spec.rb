@@ -1,4 +1,4 @@
-require 'rails_helper'
+require File.expand_path('../rails_helper', __dir__)
 
 RSpec.describe 'POST /redmine_github/webhook/' do
   before do
