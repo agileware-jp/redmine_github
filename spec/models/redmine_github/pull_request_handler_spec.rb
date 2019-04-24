@@ -10,12 +10,13 @@ RSpec.describe RedmineGithub::PullRequestHandler do
           'pull_request' => {
             'html_url' => url,
             'head' => {
-              'ref' => 'feature/@1234-my_first_pr'
+              'ref' => "feature/@#{issue.id}-my_first_pr"
             }
           }
         }
       end
       let(:url) { 'https://github.com/company/repo/pull/1' }
+      let(:issue) { create :issue }
 
       it { expect { subject }.to change(PullRequest, :count).by(1) }
 
