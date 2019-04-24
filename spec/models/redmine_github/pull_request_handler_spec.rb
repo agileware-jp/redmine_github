@@ -24,18 +24,16 @@ RSpec.describe RedmineGithub::PullRequestHandler do
   end
 
   describe '.extract_issue_id' do
-    subject { RedmineGithub::PullRequestHandler.extract_issue_id(payload) }
+    subject { RedmineGithub::PullRequestHandler.extract_issue_id(branch_name) }
 
-    let(:payload) {
-      {
-        'pull_request' => {
-          'head' => {
-            'ref' => 'feature/@1234-my_first_pr'
-          }
-        }
-      }
-    }
+    context 'when branch_name has an @{issue_id}' do
+      let(:branch_name) { 'feature/@1234-my_first_pr' }
+      it { is_expected.to eq 1234 }
+    end
 
-    it { is_expected.to eq 1234 }
+    context 'when branch_name has a number without @' do
+      let(:branch_name) { 'feature/1234-my_first_pr' }
+      it { is_expected.to be_nil }
+    end
   end
 end
