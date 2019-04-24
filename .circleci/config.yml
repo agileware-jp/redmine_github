@@ -70,14 +70,14 @@ executors:
     docker:
       - image: circleci/ruby:<< parameters.ruby_version >>-node-browsers
       - image: circleci/postgres:latest
-  ruby-mariadb:
+  ruby-mysql:
     parameters:
       ruby_version:
         description: version of Ruby
         type: string
     docker:
       - image: circleci/ruby:<< parameters.ruby_version >>-node-browsers
-      - image: circleci/mariadb:10.3
+      - image: circleci/mysql:5.7
         environment:
           - MYSQL_ALLOW_EMPTY_PASSWORD: true
           - MYSQL_ROOT_HOST: '%'
@@ -165,8 +165,8 @@ workflows:
           redmine_version: '3.4.10'
           ruby_version: '2.4'
       - rspec:
-          name: 'Ruby 2.4 Redmine 3.4.10 MariaDB'
-          db: mariadb
+          name: 'Ruby 2.4 Redmine 3.4.10 MySQL'
+          db: mysql
           redmine_version: '3.4.10'
           ruby_version: '2.4'
       - rspec:
@@ -175,7 +175,7 @@ workflows:
           redmine_version: '4.0.3'
           ruby_version: '2.4'
       - rspec:
-          name: 'Ruby 2.4 Redmine 4.0.3 MariaDB'
-          db: mariadb
+          name: 'Ruby 2.4 Redmine 4.0.3 MySQL'
+          db: mysql
           redmine_version: '4.0.3'
           ruby_version: '2.4'
