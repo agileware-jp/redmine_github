@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateSshKeys < RedmineGithub::Migration::MIGRATION_CLASS
   def change
     create_table :ssh_keys do |t|

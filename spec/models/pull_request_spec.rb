@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require File.expand_path('../rails_helper', __dir__)
 
 RSpec.describe PullRequest do
