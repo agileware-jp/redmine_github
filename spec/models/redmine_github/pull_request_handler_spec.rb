@@ -5,9 +5,16 @@ RSpec.describe RedmineGithub::PullRequestHandler do
     subject { RedmineGithub::PullRequestHandler.handle(payload) }
 
     context 'action is "opened"' do
-      let(:payload) {
-        { 'pull_request' => { 'html_url' => url } }
-      }
+      let(:payload) do
+        {
+          'pull_request' => {
+            'html_url' => url,
+            'head' => {
+              'ref' => 'feature/@1234-my_first_pr'
+            }
+          }
+        }
+      end
       let(:url) { 'https://github.com/company/repo/pull/1' }
 
       it { expect { subject }.to change(PullRequest, :count).by(1) }
