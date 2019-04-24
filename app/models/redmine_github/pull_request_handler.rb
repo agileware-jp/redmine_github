@@ -3,7 +3,8 @@ module RedmineGithub
     module_function
 
     def handle(payload)
-      # TODO
+      PullRequest.create(url: payload.dig('pull_request', 'html_url'))
+      nil
     end
   end
 end
