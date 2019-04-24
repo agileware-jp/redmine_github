@@ -22,4 +22,20 @@ RSpec.describe RedmineGithub::PullRequestHandler do
       end
     end
   end
+
+  describe '.extract_issue_id' do
+    subject { RedmineGithub::PullRequestHandler.extract_issue_id(payload) }
+
+    let(:payload) {
+      {
+        'pull_request' => {
+          'head' => {
+            'ref' => 'feature/@1234-my_first_pr'
+          }
+        }
+      }
+    }
+
+    it { is_expected.to eq 1234 }
+  end
 end
