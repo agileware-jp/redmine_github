@@ -4,10 +4,6 @@ RSpec.describe RedmineGithub::PullRequestHandler do
   describe '.handle' do
     subject { RedmineGithub::PullRequestHandler.handle(payload) }
 
-    let(:payload) { {} }
-
-    it { is_expected.to be_nil }
-
     context 'action is "opened"' do
       let(:payload) {
         { 'pull_request' => { 'html_url' => url } }
