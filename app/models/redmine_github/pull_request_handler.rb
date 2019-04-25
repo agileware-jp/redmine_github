@@ -5,7 +5,10 @@ module RedmineGithub
     module_function
 
     def handle(payload)
-      PullRequest.create(url: payload.dig('pull_request', 'html_url'))
+      PullRequest.create(
+        url: payload.dig('pull_request', 'html_url'),
+        issue_id: extract_issue_id(payload.dig('pull_request', 'head', 'ref'))
+      )
     end
 
     def extract_issue_id(branch_name)

@@ -20,7 +20,7 @@ RSpec.describe RedmineGithub::PullRequestHandler do
       let(:url) { 'https://github.com/company/repo/pull/1' }
       let(:issue) { create :issue }
 
-      it { expect { subject }.to change(PullRequest, :count).by(1) }
+      it { expect { subject }.to change { PullRequest.exists?(issue_id: issue.id) }.to true }
 
       it do
         subject
