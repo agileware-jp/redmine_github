@@ -7,7 +7,7 @@ RSpec.describe 'Issue Index Page' do
 
   before do
     @issue_without_pr = create(:issue, subject: 'Issue without PR')
-    PullRequest.create!(issue_id: issue_with_pr.id, url: 'https://github.com/octocat/spoon-fork/pulls/1')
+    issue_with_pr.create_pull_request!(url: 'https://github.com/octocat/spoon-fork/pulls/1')
     visit issues_path
   end
 

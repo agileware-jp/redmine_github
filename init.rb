@@ -15,5 +15,7 @@ RedmineGithub::Reloader.to_prepare do
 
   RepositoriesController.helper GithubHelper
   User.include RedmineGithub::UserPatch
+
+  Issue.include RedmineGithub::Include::IssuePatch
   Issue.prepend RedmineGithub::Prepend::IssuePatch
 end

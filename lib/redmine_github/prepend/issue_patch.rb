@@ -4,7 +4,7 @@ module RedmineGithub
   module Prepend
     module IssuePatch
       def css_classes(_user = User.current)
-        if PullRequest.exists?(issue_id: id)
+        if pull_request.present?
           super + ' has-pull-request'
         else
           super
