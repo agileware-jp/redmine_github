@@ -12,7 +12,7 @@ RSpec.describe RedmineGithub::PullRequestHandler do
           'pull_request' => {
             'html_url' => url,
             'head' => {
-              'ref' => "feature/@#{issue.id}-my_first_pr"
+              'ref' => ref
             }
           }
         }
@@ -20,11 +20,17 @@ RSpec.describe RedmineGithub::PullRequestHandler do
       let(:url) { 'https://github.com/company/repo/pull/1' }
       let(:issue) { create :issue }
 
-      it { expect { subject }.to change { PullRequest.exists?(issue_id: issue.id) }.to true }
+      context 'when the branch has an issue ID' do
+        let(:ref) { "feature/@#{issue.id}-my_first_pr" }
 
-      it do
-        subject
-        expect(PullRequest.exists?(url: url)).to be true
+        it { expect { subject }.to change { PullRequest.exists?(url: url, issue_id: issue.id) }.to true }
+        it { expect { subject }.to change(PullRequest, :count).by(1) }
+      end
+
+      context 'when the branch does not have an issue ID' do
+        let(:ref) { "feature/#{issue.id}-my_first_pr" }
+
+        it { expect { subject }.not_to change(PullRequest, :count) }
       end
     end
   end

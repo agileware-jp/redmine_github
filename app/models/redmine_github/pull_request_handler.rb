@@ -5,9 +5,12 @@ module RedmineGithub
     module_function
 
     def handle(payload)
+      issue_id = extract_issue_id(payload.dig('pull_request', 'head', 'ref'))
+      return if issue_id.blank?
+
       PullRequest.create(
         url: payload.dig('pull_request', 'html_url'),
-        issue_id: extract_issue_id(payload.dig('pull_request', 'head', 'ref'))
+        issue_id: issue_id
       )
     end
 
