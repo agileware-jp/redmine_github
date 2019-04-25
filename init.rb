@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 Redmine::Plugin.register :redmine_github do
   name 'Redmine Github plugin'

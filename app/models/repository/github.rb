@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Repository::Github < Repository::Git
   validates_presence_of :url
 

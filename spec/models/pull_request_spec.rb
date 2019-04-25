@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require File.expand_path('../rails_helper', __dir__)
 
 RSpec.describe PullRequest do
   describe 'validation URL' do
-    let (:pull_request) { PullRequest.new }
+    let(:pull_request) { PullRequest.new }
 
     it do
       pull_request.valid?

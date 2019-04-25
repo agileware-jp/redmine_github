@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreatePullRequests < RedmineGithub::Migration::MIGRATION_CLASS
   def change
     create_table :pull_requests do |t|

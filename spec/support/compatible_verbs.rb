@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CompatibleVerbs
   def post(path, env: {}, headers: {}, params: nil)
     super(path, params, env.merge(headers))
