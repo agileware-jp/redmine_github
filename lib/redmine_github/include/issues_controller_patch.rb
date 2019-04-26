@@ -9,7 +9,7 @@ module RedmineGithub
         helper(Module.new do
           def column_value(column, item, value)
             # TODO: fix N+1
-            if column.name == :subject && item.pull_request.present?
+            if column.name == :subject && item.try(:pull_request).present?
               '[PR]'.html_safe + super
             else
               super
