@@ -18,4 +18,6 @@ RedmineGithub::Reloader.to_prepare do
 
   Issue.include RedmineGithub::Include::IssuePatch
   Issue.prepend RedmineGithub::Prepend::IssuePatch
+
+  IssuesController.include RedmineGithub::Include::IssuesControllerPatch
 end
