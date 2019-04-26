@@ -17,7 +17,12 @@ RSpec.describe 'Issue Index Page' do
   end
 
   specify 'User sees PR status on GitHub only if an issue has a PR' do
-    expect(page).to have_content '[PR]Issue with PR'
-    expect(page).not_to have_content '[PR]Issue without PR'
+    within 'tr.issue.has-pull-request > td.subject' do
+      expect(page).to have_selector 'a', count: 2
+      expect(page).to have_selector %(a[href="#{issue_with_pr.pull_request.url}"])
+    end
+    within 'tr.issue:not(.has-pull-request) > td.subject' do
+      expect(page).to have_selector 'a', count: 1
+    end
   end
 end
