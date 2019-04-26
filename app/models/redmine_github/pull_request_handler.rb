@@ -8,9 +8,8 @@ module RedmineGithub
       issue_id = extract_issue_id(payload.dig('pull_request', 'head', 'ref'))
       return if issue_id.blank?
 
-      PullRequest.create(
-        url: payload.dig('pull_request', 'html_url'),
-        issue_id: issue_id
+      Issue.find_by(id: issue_id)&.create_pull_request(
+        url: payload.dig('pull_request', 'html_url')
       )
     end
 
