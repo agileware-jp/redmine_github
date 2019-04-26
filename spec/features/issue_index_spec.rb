@@ -16,7 +16,8 @@ RSpec.describe 'Issue Index Page' do
     expect(page).not_to have_selector "tr#issue-#{@issue_without_pr.id}.issue.has-pull-request"
   end
 
-  specify 'User sees PR status on GitHub', :pending do
-    expect(page).to have_content '[PR]My first PR'
+  specify 'User sees PR status on GitHub only if an issue has a PR' do
+    expect(page).to have_content '[PR]Issue with PR'
+    expect(page).not_to have_content '[PR]Issue without PR'
   end
 end
