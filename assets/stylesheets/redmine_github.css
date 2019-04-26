@@ -1,0 +1,7 @@
+.icon-pr-opened {
+  background-image: url(../images/pr-opened.svg);
+}
+
+a.icon-pr-opened:hover {
+  text-decoration: none;
+}
