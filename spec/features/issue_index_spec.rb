@@ -3,13 +3,11 @@
 require File.expand_path('../rails_helper', __dir__)
 
 RSpec.describe 'Issue Index Page' do
-  let(:user) { create(:user) }
   let(:issue_with_pr) { create(:issue, subject: 'Issue with PR') }
 
   before do
     @issue_without_pr = create(:issue, subject: 'Issue without PR')
     issue_with_pr.create_pull_request!(url: 'https://github.com/octocat/spoon-fork/pulls/1')
-    login_as user
     visit issues_path
   end
 

@@ -6,7 +6,5 @@ FactoryBot.define do
     sequence(:login) { |n| "user_#{n}" }
     firstname { 'first' }
     lastname { 'last' }
-    password { 'password' }
-    admin { true }
   end
 end
