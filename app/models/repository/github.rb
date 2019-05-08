@@ -1,6 +1,7 @@
 # frozen_string_literal: true
+require_dependency 'repository/git'
 
-class Repository::Github < Repository::Git
+class Repository::Github < ::Repository::Git
   validates_presence_of :url
 
   delegate :bare_clone, to: :scm
