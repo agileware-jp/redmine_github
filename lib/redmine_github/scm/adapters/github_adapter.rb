@@ -22,12 +22,9 @@ module RedmineGithub::Scm::Adapters
       parsed_url = URI.parse(url)
 
       # uri = url or "#{login}@url" or "#{login}:#{password}@url"
-      credentials = @login ? @login : ''
-      credentials += ":#{@password}" if @password.present?
-
-      uri = credentials.present? ? "#{parsed_url.scheme}://#{credentials}@" : "#{parsed_url.scheme}://"
-      uri += "#{parsed_url.host}#{parsed_url.path}"
-      uri
+      parsed_url.user ||= @login
+      parsed_url.password = @password if @password.present?
+      parsed_url.to_s
     end
 
     def bare_clone
