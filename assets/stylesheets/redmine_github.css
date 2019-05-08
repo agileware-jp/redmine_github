@@ -1,7 +1,17 @@
-.icon-pr-opened {
+.icon-pr.opened {
   background-image: url(../images/pr-opened.svg);
 }
 
-a.icon-pr-opened:hover {
+.icon-pr.merged {
+  background-image: url(../images/pr-merged.svg);
+}
+
+a.icon-pr {
+  background-position: 0% 50%;
+  background-repeat: no-repeat;
+  padding-left: 50px;
+}
+
+a.icon-pr:hover {
   text-decoration: none;
 }

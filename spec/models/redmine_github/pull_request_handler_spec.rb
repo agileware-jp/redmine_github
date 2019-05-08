@@ -13,12 +13,14 @@ RSpec.describe RedmineGithub::PullRequestHandler do
             'html_url' => url,
             'head' => {
               'ref' => ref
-            }
+            },
+            'merged_at' => merged_at
           }
         }
       end
       let(:url) { 'https://github.com/company/repo/pull/1' }
       let(:issue) { create :issue }
+      let(:merged_at) { nil }
 
       context 'when the branch has an issue ID' do
         let(:ref) { "feature/@#{issue.id}-my_first_pr" }
@@ -31,6 +33,15 @@ RSpec.describe RedmineGithub::PullRequestHandler do
         let(:ref) { "feature/#{issue.id}-my_first_pr" }
 
         it { expect { subject }.not_to change(PullRequest, :count) }
+      end
+
+      context 'when a issue has pull request' do
+        let(:ref) { "feature/@#{issue.id}-my_first_pr" }
+        let(:merged_at) { '2019-05-08T04:01:03Z'.to_datetime }
+        let!(:pull_request) { create :pull_request, issue: issue, url: url }
+
+        it { expect { subject }.to_not change(PullRequest, :count) }
+        it { expect { subject }.to(change { pull_request.reload.merged_at }.from(nil)) }
       end
     end
   end
