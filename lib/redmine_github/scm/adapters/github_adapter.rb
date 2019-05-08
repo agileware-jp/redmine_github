@@ -22,7 +22,7 @@ module RedmineGithub::Scm::Adapters
       parsed_url = URI.parse(url)
 
       # uri = url or "#{login}@url" or "#{login}:#{password}@url"
-      parsed_url.user ||= @login
+      parsed_url.user = @login if @login.present?
       parsed_url.password = @password if @password.present?
       parsed_url.to_s
     end
