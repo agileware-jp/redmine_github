@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module RedmineGithub
-  class WebhooksController < ApplicationController
-    skip_before_action :verify_authenticity_token
-
+  class WebhooksController < ActionController::Base
     def dispatch_event
       if request.headers['x-github-event'] == 'pull_request'
         PullRequestHandler.handle('pull_request' => params[:pull_request])
