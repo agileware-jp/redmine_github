@@ -12,10 +12,11 @@ FactoryBot.define do
     trait :with_pull_request do
       transient do
         sequence(:pull_request_url) { |n| "http://example.com/pull_requests/#{n}" }
+        pull_request_merged_at { nil }
       end
 
       after(:create) do |issue, evaluator|
-        create :pull_request, issue: issue, url: evaluator.pull_request_url
+        create :pull_request, issue: issue, url: evaluator.pull_request_url, merged_at: evaluator.pull_request_merged_at
       end
     end
   end
