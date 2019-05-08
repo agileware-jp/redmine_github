@@ -1,5 +1,0 @@
-<%= form.fields_for :ssh_key, user.ssh_key || SshKey.new do |ssh_key_form| %>
-  <p><%= ssh_key_form.text_area :public_key %></p>
-  <p><%= ssh_key_form.text_area :private_key %></p>
-<% end %>
-

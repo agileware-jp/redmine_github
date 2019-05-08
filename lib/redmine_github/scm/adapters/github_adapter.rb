@@ -1,36 +1,40 @@
 # frozen_string_literal: true
+require 'uri'
 
 module RedmineGithub::Scm::Adapters
   class GithubAdapter < Redmine::Scm::Adapters::GitAdapter
     def repositories_root_path
-      Rails.root.join('repositories')
+      repo_path = Rails.root.join('repositories')
+
+      FileUtils.mkdir_p(repo_path) unless Dir.exist?(repo_path)
+
+      repo_path
     end
 
     def root_url
-      repositories_root_path.join(url.split(':').last.sub('.git', ''))
+      return '' unless url
+
+      root_path = url.split('/')[-2..-1].join('-').sub('.git', '')
+      repositories_root_path.join(root_path)
+    end
+
+    def url_with_token
+      parsed_url = URI.parse(url)
+
+      # uri = url or "#{login}@url" or "#{login}:#{password}@url"
+      credentials = @login ? @login : ''
+      credentials += ":#{@password}" if @password.present?
+
+      uri = credentials.present? ? "#{parsed_url.scheme}://#{credentials}@" : "#{parsed_url.scheme}://"
+      uri += "#{parsed_url.host}#{parsed_url.path}"
+      uri
     end
 
     def bare_clone
       return if Dir.exist?(root_url)
 
-      configure_ssh_key do
-        cmd_args = %W[clone --bare #{url} #{root_url}]
-        git_cmd(cmd_args)
-      end
-    end
-
-    def configure_ssh_key
-      if User.current.ssh_key.present? && User.current.ssh_key.private_key.present?
-        Tempfile.create('id_rsa') do |f|
-          f.write User.current.ssh_key.private_key
-
-          shellout("git config core.sshCommand \"ssh -i #{f.path} -F /dev/null\"")
-
-          yield
-        end
-      else
-        yield
-      end
+      cmd_args = %W[clone --bare #{url_with_token} #{root_url}]
+      git_cmd(cmd_args)
     end
   end
 end
