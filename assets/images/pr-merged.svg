@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="52" height="16" viewBox="0 0 52 16">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #6f42c1;
+      }
+
+      .cls-2 {
+        fill: #fff;
+        font-size: 10.8px;
+        font-family: HelveticaNeue-Medium, Helvetica Neue;
+        font-weight: 500;
+        letter-spacing: 0.025em;
+      }
+    </style>
+  </defs>
+  <g id="グループ化_27" data-name="グループ化 27" transform="translate(-377 -550)">
+    <g id="グループ化_17" data-name="グループ化 17" transform="translate(17 -34)">
+      <rect id="長方形_11" data-name="長方形 11" class="cls-1" width="52" height="16" rx="2" transform="translate(360 584)"/>
+      <text id="merged" class="cls-2" transform="translate(366 595)"><tspan x="0" y="0">merged</tspan></text>
+    </g>
+  </g>
+</svg>
