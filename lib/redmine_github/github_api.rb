@@ -8,15 +8,16 @@ module RedmineGithub
     END_POINT = 'https://api.github.com/graphql'
 
     def self.client_by_repository(repository)
-      @class_by_repository ||= {}
-      @class_by_repository[repository.id] ||= build_client_class(repository)
+      @module_by_repository ||= {}
+      @module_by_repository[repository.id] ||= build_client_module(repository)
     end
 
-    def self.build_client_class(repository)
+    def self.build_client_module(repository)
+      # A repository has personal token and graphql schema may differcent from each repositories.
+      # But graphql query must be constant variable, then create client module for each repositories.
       mod = Module.new
       self.const_set("Repository#{repository.id}Client", mod)
-      mod.class_eval do
-        mod.const_set :REPOSITORY, repository
+      mod.module_eval do
         http = GraphQL::Client::HTTP.new(END_POINT) do
           @@__secret_token__ = repository.password
 
@@ -38,6 +39,7 @@ module RedmineGithub
                 title
                 state
                 mergeable
+                mergedAt
                 mergeStateStatus
               }
             }

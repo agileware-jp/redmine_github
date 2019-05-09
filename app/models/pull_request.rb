@@ -39,7 +39,8 @@ class PullRequest < ActiveRecord::Base
     ret = RedmineGithub::GithubAPI.client_by_repository(repository).fetch_pull_request(self)
     return if ret.errors.any? # TODO logging
 
-    update(mergeable_state: ret.data.repository.pull_request.merge_state_status)
+    pr = ret.data.repository.pull_request
+    update(merged_at: pr.merged_at, mergeable_state: pr.merge_state_status)
   end
 
   private

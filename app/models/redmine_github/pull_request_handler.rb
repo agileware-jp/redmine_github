@@ -24,27 +24,18 @@ module RedmineGithub
         url: payload.dig('pull_request', 'html_url')
       )
 
-      pull_request.update(merged_at: payload.dig('pull_request', 'merged_at'))
+      pull_request.sync
     end
 
     def pull_request_review(payload)
-      issue = Issue.find_by(id: extract_issue_id(payload.dig('pull_request', 'head', 'ref')))
-      return if issue.blank?
-
-      pull_request = PullRequest.find_or_create_by(
-        issue: issue,
-        url: payload.dig('pull_request', 'html_url')
-      )
-
-      pull_request.sync
+      handle_pull_request(payload)
     end
 
     def handle_push(payload)
       issue = Issue.find_by(id: extract_issue_id(payload.dig('ref')))
       return if issue.blank?
 
-      pull_request = PullRequest.find_by(issue: issue)
-      pull_request.try!(:sync)
+      PullRequest.where(issue: issue).find_each(&:sync)
     end
 
     def handle_status(payload)
