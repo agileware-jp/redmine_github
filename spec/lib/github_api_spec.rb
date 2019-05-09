@@ -8,9 +8,10 @@ RSpec.describe RedmineGithub::GithubAPI do
       Setting.enabled_scm = Setting.enabled_scm + ['Github']
     end
     allow_any_instance_of(RedmineGithub::Scm::Adapters::GithubAdapter).to receive(:bare_clone)
-    stub_request(:post, "https://api.github.com/graphql").
-      with(body: graphpl_json_for(:load_schema_request)).
-      to_return(status: 200, body: graphpl_json_for(:load_schema_response))
+    graphql_mock(
+      request: graphpl_json_for(:load_schema_request),
+      response: graphpl_json_for(:load_schema_response)
+    )
   end
 
   let(:repository) { create :github_repository, url: 'https://github.com/agileware-jp/sample.git' }
@@ -22,9 +23,15 @@ RSpec.describe RedmineGithub::GithubAPI do
     let(:mergeable_state) { 'CLEAN' }
 
     before do
-     stub_request(:post, "https://api.github.com/graphql").
-       with(body: graphpl_json_for(:fetch_pr_request, repository_id: repository.id)).
-       to_return(status: 200, body: graphpl_json_for(:fetch_pr_response, merged_at: merged_at, mergeable_state: mergeable_state))
+      request = graphpl_json_for(:fetch_pr_request,
+                                 repository_id: repository.id,
+                                 pull_request_number: pull_request.number,
+                                 repo_owner: pull_request.repo_owner,
+                                 repo_name: pull_request.repo_name)
+      response = graphpl_json_for(:fetch_pr_response,
+                                  merged_at: merged_at,
+                                  mergeable_state: mergeable_state)
+      graphql_mock(request: request, response: response)
     end
 
     it { expect(subject.data.repository.pull_request.merged_at).to eq(merged_at) }

@@ -3,6 +3,11 @@
 module GraphqlQueryHelper
   ROOT_PATH = File.expand_path("../graphql_queries", __dir__)
 
+  def graphql_mock(request:, response:)
+    stub_request(:post, "https://api.github.com/graphql").
+      with(body: request).to_return(status: 200, body: response)
+  end
+
   def graphpl_json_for(id, variables = {})
     path = "#{ROOT_PATH}/#{id}.json"
     erb_path = "#{path}.erb"
