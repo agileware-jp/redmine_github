@@ -7,6 +7,8 @@ class PullRequest < ActiveRecord::Base
   def state
     if merged_at.present?
       :merged
+    elsif %w[CLEAN].include? mergeable_state
+      :mergeable
     else
       :opened
     end
