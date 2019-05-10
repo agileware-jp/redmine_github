@@ -81,7 +81,7 @@ RSpec.describe PullRequest do
       expect(RedmineGithub::GithubAPI).to receive(:client_by_repository).with(repository).and_return(client_stub)
     end
 
-    let(:result) {
+    let(:result) do
       JSON.parse({
         data: {
           repository: {
@@ -93,15 +93,15 @@ RSpec.describe PullRequest do
         },
         errors: errors
       }.to_json, object_class: OpenStruct)
-    }
+    end
     let(:merged_at) { '2019-05-10 12:00:00'.to_datetime }
     let(:mergeable_state) { 'CLEAN' }
     let(:errors) { [] }
     it {
       expect { subject }.to(
-        change {
+        change do
           pull_request.reload.attributes.slice('merged_at', 'mergeable_state').symbolize_keys
-        }.to({ merged_at: merged_at, mergeable_state: mergeable_state })
+        end.to(merged_at: merged_at, mergeable_state: mergeable_state)
       )
     }
   end

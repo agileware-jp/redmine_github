@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.configure do |config|
   config.before(:suite) do
     Setting.enabled_scm = Setting.enabled_scm + ['Github'] if Setting.enabled_scm.exclude?('Github')
