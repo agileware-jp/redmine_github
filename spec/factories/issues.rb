@@ -13,10 +13,15 @@ FactoryBot.define do
       transient do
         sequence(:pull_request_url) { |n| "http://example.com/pull_requests/#{n}" }
         pull_request_merged_at { nil }
+        pull_request_mergeable_state { nil }
       end
 
       after(:create) do |issue, evaluator|
-        create :pull_request, issue: issue, url: evaluator.pull_request_url, merged_at: evaluator.pull_request_merged_at
+        create :pull_request,
+               issue: issue,
+               url: evaluator.pull_request_url,
+               merged_at: evaluator.pull_request_merged_at,
+               mergeable_state: evaluator.pull_request_mergeable_state
       end
     end
   end
