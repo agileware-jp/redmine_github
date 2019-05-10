@@ -41,7 +41,7 @@ RSpec.describe RedmineGithub::PullRequestHandler do
         let!(:pull_request) { create :pull_request, issue: issue, url: url }
 
         before do
-          allow_any_instance_of(PullRequest).to receive(:sync)
+          expect_any_instance_of(PullRequest).to receive(:sync)
         end
 
         it { expect { subject }.to_not change(PullRequest, :count) }
