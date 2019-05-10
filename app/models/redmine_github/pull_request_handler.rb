@@ -27,7 +27,7 @@ module RedmineGithub
       pull_request.sync
     end
 
-    def pull_request_review(payload)
+    def handle_pull_request_review(payload)
       handle_pull_request(payload)
     end
 
