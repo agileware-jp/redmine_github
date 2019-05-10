@@ -50,7 +50,7 @@ RSpec.describe RedmineGithub::PullRequestHandler do
   end
 
   describe '.handle pull_request_review' do
-    subject { RedmineGithub::PullRequestHandler.handle('pull_request', payload) }
+    subject { RedmineGithub::PullRequestHandler.handle('pull_request_review', payload) }
 
     let(:payload) { {} }
 
