@@ -3,8 +3,8 @@
 require File.expand_path('../../rails_helper', __dir__)
 
 RSpec.describe RedmineGithub::PullRequestHandler do
-  describe '.handle' do
-    subject { RedmineGithub::PullRequestHandler.handle(payload) }
+  describe '.handle pull_request' do
+    subject { RedmineGithub::PullRequestHandler.handle('pull_request', payload) }
 
     context 'action is "opened"' do
       let(:payload) do
@@ -37,11 +37,79 @@ RSpec.describe RedmineGithub::PullRequestHandler do
 
       context 'when a issue has pull request' do
         let(:ref) { "feature/@#{issue.id}-my_first_pr" }
-        let(:merged_at) { '2019-05-08T04:01:03Z'.to_datetime }
+        let!(:repository) { create :github_repository, url: 'https://github.com/company/repo.git' }
         let!(:pull_request) { create :pull_request, issue: issue, url: url }
 
+        before do
+          expect_any_instance_of(PullRequest).to receive(:sync)
+        end
+
         it { expect { subject }.to_not change(PullRequest, :count) }
-        it { expect { subject }.to(change { pull_request.reload.merged_at }.from(nil)) }
+      end
+    end
+  end
+
+  describe '.handle pull_request_review' do
+    subject { RedmineGithub::PullRequestHandler.handle('pull_request_review', payload) }
+
+    let(:payload) { {} }
+
+    it {
+      expect(RedmineGithub::PullRequestHandler).to(
+        receive(:handle_pull_request).with(payload)
+      )
+      subject
+    }
+  end
+
+  describe '.handle push' do
+    subject { RedmineGithub::PullRequestHandler.handle('push', payload) }
+
+    let(:payload) { { 'ref' => ref } }
+    let!(:issue) { create :issue }
+    let!(:pull_request) { create :pull_request, issue: issue }
+
+    context 'related issues exists' do
+      let(:ref) { "feature/@#{issue.id}" }
+
+      it do
+        expect_any_instance_of(PullRequest).to receive(:sync)
+        subject
+      end
+    end
+
+    context 'related issues not exists' do
+      let(:ref) { "feature/#{issue.id}" }
+
+      it do
+        expect_any_instance_of(PullRequest).to_not receive(:sync)
+        subject
+      end
+    end
+  end
+
+  describe '.handle status' do
+    subject { RedmineGithub::PullRequestHandler.handle('status', payload) }
+
+    let(:payload) { { 'branches' => [{ name: branch }] } }
+    let!(:issue) { create :issue }
+    let!(:pull_request) { create :pull_request, issue: issue }
+
+    context 'related issues exists' do
+      let(:branch) { "feature/@#{issue.id}" }
+
+      it do
+        expect_any_instance_of(PullRequest).to receive(:sync).and_return(true)
+        subject
+      end
+    end
+
+    context 'related issues not exists' do
+      let(:branch) { "feature/#{issue.id}" }
+
+      it do
+        expect_any_instance_of(PullRequest).to_not receive(:sync)
+        subject
       end
     end
   end

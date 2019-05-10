@@ -1,0 +1,1 @@
+gem 'graphql-client'

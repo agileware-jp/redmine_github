@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'uri'
 
 module RedmineGithub::Scm::Adapters
@@ -22,8 +23,8 @@ module RedmineGithub::Scm::Adapters
       parsed_url = URI.parse(url)
 
       # uri = url or "#{login}@url" or "#{login}:#{password}@url"
-      parsed_url.user = @login if @login.present?
-      parsed_url.password = @password if @password.present?
+      parsed_url.user = ERB::Util.url_encode(@login) if @login.present?
+      parsed_url.password = ERB::Util.url_encode(@password) if @password.present?
       parsed_url.to_s
     end
 

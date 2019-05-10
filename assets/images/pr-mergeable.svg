@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="52" height="16" viewBox="0 0 52 16">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #01aa3e;
+      }
+
+      .cls-2 {
+        fill: #fff;
+        font-size: 10.8px;
+        font-family: HelveticaNeue-Medium, Helvetica Neue;
+        font-weight: 500;
+        letter-spacing: -0.02em;
+      }
+    </style>
+  </defs>
+  <g id="グループ化_16" data-name="グループ化 16" transform="translate(-261 -584)">
+    <rect id="長方形_10" data-name="長方形 10" class="cls-1" width="52" height="16" rx="2" transform="translate(261 584)"/>
+    <text id="approved" class="cls-2" transform="translate(264 595)"><tspan x="0" y="0">approved</tspan></text>
+  </g>
+</svg>

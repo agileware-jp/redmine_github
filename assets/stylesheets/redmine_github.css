@@ -6,6 +6,10 @@
   background-image: url(../images/pr-merged.svg);
 }
 
+.icon-pr.mergeable {
+  background-image: url(../images/pr-mergeable.svg);
+}
+
 a.icon-pr {
   background-position: 0% 50%;
   background-repeat: no-repeat;

@@ -1,2 +1,11 @@
 AllCops:
   TargetRubyVersion: 2.4
+
+Metrics/LineLength:
+  Max: 136
+
+Style/Documentation:
+  Enabled: false
+
+Style/AsciiComments:
+  Enabled: false

@@ -3,11 +3,14 @@
 module RedmineGithub
   class WebhooksController < ActionController::Base
     def dispatch_event
-      if request.headers['x-github-event'] == 'pull_request'
-        PullRequestHandler.handle('pull_request' => params[:pull_request])
+      event = request.headers['x-github-event']
+      case event
+      when 'pull_request', 'pull_request_review', 'push', 'status'
+        PullRequestHandler.handle(event, params)
         head :ok
       else
-        head :bad_request
+        # ignore
+        head :ok
       end
     end
   end
