@@ -10,11 +10,11 @@ RSpec.describe RedmineGithub::GithubAPI do
     )
   end
 
-  let(:repository) { create :github_repository, url: 'https://github.com/agileware-jp/sample.git' }
+  let(:repository) { create :github_repository, url: 'https://github.com/company/repo.git' }
   describe '#fetch_pull_request' do
     subject { described_class.client_by_repository(repository).fetch_pull_request(pull_request) }
 
-    let(:pull_request) { create :pull_request, url: 'https://github.com/agileware-jp/sample/pull/1' }
+    let(:pull_request) { create :pull_request, url: 'https://github.com/company/repo/pull/1' }
     let(:merged_at) { Time.current.to_s }
     let(:mergeable_state) { 'CLEAN' }
 
