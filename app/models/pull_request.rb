@@ -37,7 +37,7 @@ class PullRequest < ActiveRecord::Base
     return unless repository
 
     ret = RedmineGithub::GithubAPI.client_by_repository(repository).fetch_pull_request(self)
-    return if ret.errors.any? # TODO logging
+    return if ret.errors.any? # TODO: logging
 
     pr = ret.data.repository.pull_request
     update(merged_at: pr.merged_at, mergeable_state: pr.merge_state_status)
@@ -46,6 +46,6 @@ class PullRequest < ActiveRecord::Base
   private
 
   def scan_url
-    @repo_owner, @repo_name, @number = url.to_s.scan(/\Ahttps:\/\/github.com\/(.+)\/(.+)\/pull\/(\d+)\z/).flatten
+    @repo_owner, @repo_name, @number = url.to_s.scan(%r{\Ahttps://github.com/(.+)/(.+)/pull/(\d+)\z}).flatten
   end
 end

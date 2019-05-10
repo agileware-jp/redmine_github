@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require_dependency 'repository/git'
 
 class Repository::Github < ::Repository::Git
