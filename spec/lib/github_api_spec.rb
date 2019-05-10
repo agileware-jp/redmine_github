@@ -4,10 +4,6 @@ require File.expand_path('../rails_helper', __dir__)
 
 RSpec.describe RedmineGithub::GithubAPI do
   before do
-    if Setting.enabled_scm.exclude?('Github')
-      Setting.enabled_scm = Setting.enabled_scm + ['Github']
-    end
-    allow_any_instance_of(RedmineGithub::Scm::Adapters::GithubAdapter).to receive(:bare_clone)
     graphql_mock(
       request: graphpl_json_for(:load_schema_request),
       response: graphpl_json_for(:load_schema_response)

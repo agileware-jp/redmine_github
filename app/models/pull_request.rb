@@ -16,7 +16,7 @@ class PullRequest < ActiveRecord::Base
 
   def number
     scan_url if @number.nil?
-    @number
+    @number.to_i
   end
 
   def repo_owner
