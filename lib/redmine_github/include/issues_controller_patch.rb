@@ -11,7 +11,7 @@ module RedmineGithub
             # TODO: fix N+1
             if column.name == :subject && item.try(:pull_request).present?
               link_to(
-                '&nbsp;'.html_safe,
+                '',
                 item.pull_request.url,
                 class: "icon-pr #{item.pull_request.state}"
               ) + super
