@@ -13,8 +13,8 @@
 a.icon-pr {
   background-position: 0% 50%;
   background-repeat: no-repeat;
-  padding-left: 50px;
-  padding-right: 6px;
+  padding-left: 16px;
+  margin-left: 8px;
 }
 
 a.icon-pr:hover {

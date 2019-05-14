@@ -10,11 +10,11 @@ module RedmineGithub
           def column_value(column, item, value)
             # TODO: fix N+1
             if column.name == :subject && item.try(:pull_request).present?
-              link_to(
+              super + link_to(
                 '',
                 item.pull_request.url,
                 class: "icon-pr #{item.pull_request.state}"
-              ) + super
+              )
             else
               super
             end
