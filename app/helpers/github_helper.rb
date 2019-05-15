@@ -12,7 +12,7 @@ module GithubHelper
     scm_path_info_tag(repository)) +
       content_tag('p', form.text_field(:login, size: 30)) +
       content_tag('p', form.password_field(
-                         :password, size: 30, name: 'ignore',
+                         :password, label: l(:label_github_token), size: 30, name: 'ignore',
                                     value: (repository.new_record? || repository.password.blank? ? '' : ('x' * 15)),
                                     onfocus: "this.value=''; this.name='repository[password]';",
                                     onchange: "this.name='repository[password]';"
