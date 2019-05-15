@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="52" height="16" viewBox="0 0 52 16">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
   <defs>
     <style>
       .cls-1 {
@@ -7,17 +7,12 @@
 
       .cls-2 {
         fill: #fff;
-        font-size: 10.8px;
-        font-family: HelveticaNeue-Medium, Helvetica Neue;
-        font-weight: 500;
-        letter-spacing: 0.025em;
+        fill-rule: evenodd;
       }
     </style>
   </defs>
-  <g id="グループ化_27" data-name="グループ化 27" transform="translate(-377 -550)">
-    <g id="グループ化_17" data-name="グループ化 17" transform="translate(17 -34)">
-      <rect id="長方形_11" data-name="長方形 11" class="cls-1" width="52" height="16" rx="2" transform="translate(360 584)"/>
-      <text id="merged" class="cls-2" transform="translate(366 595)"><tspan x="0" y="0">merged</tspan></text>
-    </g>
+  <g id="グループ化_6" data-name="グループ化 6" transform="translate(-359 -532)">
+    <rect id="長方形_3" data-name="長方形 3" class="cls-1" width="16" height="16" rx="3" transform="translate(359 532)"/>
+    <path id="パス_2" data-name="パス 2" class="cls-2" d="M180.748,349.96a1.672,1.672,0,0,0-1.442.85v-.017a4.615,4.615,0,0,1-2.608-.85,6.113,6.113,0,0,1-1.575-2.033,1.662,1.662,0,1,0-1.875.15v5.467a1.678,1.678,0,0,0-.833,1.433,1.666,1.666,0,1,0,2.5-1.433v-3.008a6.745,6.745,0,0,0,1.917,1.408,6.205,6.205,0,0,0,2.475.533v-.017a1.682,1.682,0,0,0,1.442.85,1.667,1.667,0,0,0,0-3.333Zm-5.667,5a1,1,0,1,1-1-1A1.008,1.008,0,0,1,175.082,354.96Zm-1-7.333a1,1,0,1,1,1-1A1.008,1.008,0,0,1,174.082,347.627Zm6.667,5a1,1,0,1,1,1-1A1.008,1.008,0,0,1,180.748,352.627Z" transform="translate(190.585 189.048)"/>
   </g>
 </svg>

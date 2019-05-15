@@ -1,21 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="52" height="16" viewBox="0 0 52 16">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
   <defs>
     <style>
       .cls-1 {
-        fill: #01aa3e;
+        fill: #2cbe4e;
       }
 
       .cls-2 {
         fill: #fff;
-        font-size: 10.8px;
-        font-family: HelveticaNeue-Medium, Helvetica Neue;
-        font-weight: 500;
-        letter-spacing: -0.02em;
+        fill-rule: evenodd;
       }
     </style>
   </defs>
-  <g id="グループ化_16" data-name="グループ化 16" transform="translate(-261 -584)">
-    <rect id="長方形_10" data-name="長方形 10" class="cls-1" width="52" height="16" rx="2" transform="translate(261 584)"/>
-    <text id="approved" class="cls-2" transform="translate(264 595)"><tspan x="0" y="0">approved</tspan></text>
+  <g id="グループ化_5" data-name="グループ化 5" transform="translate(-264 -532)">
+    <rect id="長方形_2" data-name="長方形 2" class="cls-1" width="16" height="16" rx="3" transform="translate(264 532)"/>
+    <path id="パス_3" data-name="パス 3" class="cls-2" d="M419.682,290.48l-7.158,7.158-3.579-3.579,1.342-1.342,2.237,2.237,5.816-5.816Z" transform="translate(-141.945 246.862)"/>
   </g>
 </svg>
