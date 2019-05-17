@@ -34,5 +34,14 @@ module RedmineGithub::Scm::Adapters
       cmd_args = %W[clone --bare #{url_with_token} #{root_url}]
       git_cmd(cmd_args)
     end
+
+    def fetch_remote
+      return unless Dir.exist?(root_url)
+
+      cmd_args = %w[fetch origin]
+      cmd_args += %w[+refs/heads/*:refs/heads/* +refs/tags/*:refs/tags/*]
+      cmd_args += %w[--prune --prune-tags]
+      git_cmd(cmd_args)
+    end
   end
 end
