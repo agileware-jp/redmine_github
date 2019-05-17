@@ -66,7 +66,7 @@ RSpec.describe RedmineGithub::Scm::Adapters::GithubAdapter do
     end
 
     context 'root directory exists' do
-      let(:git_cmd_args) { %w[fetch origin +refs/heads/*:refs/heads/* +refs/tags/*:refs/tags/* --prune --prune-tags] }
+      let(:git_cmd_args) { %w[fetch origin +refs/heads/*:refs/heads/* +refs/tags/*:refs/tags/* --prune] }
       before { expect(scm).to receive(:git_cmd).with(git_cmd_args).and_return(nil) }
       it { is_expected.to be_nil }
     end

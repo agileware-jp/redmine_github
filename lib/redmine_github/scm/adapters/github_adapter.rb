@@ -40,7 +40,7 @@ module RedmineGithub::Scm::Adapters
 
       cmd_args = %w[fetch origin]
       cmd_args += %w[+refs/heads/*:refs/heads/* +refs/tags/*:refs/tags/*]
-      cmd_args += %w[--prune --prune-tags]
+      cmd_args += %w[--prune]
       git_cmd(cmd_args)
     end
   end
