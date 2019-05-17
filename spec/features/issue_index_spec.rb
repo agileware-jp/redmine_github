@@ -28,7 +28,7 @@ RSpec.describe 'Issue Index Page' do
   specify 'User sees PR status on GitHub only if an issue has a PR' do
     within 'tr.issue.has-pull-request > td.subject' do
       expect(page).to have_selector 'a', count: 2
-      expect(page).to have_selector 'a.icon-pr.opened', count: 1
+      expect(page).to have_selector 'a.icon-pr.opened[title=PR]', count: 1
       expect(page).to have_selector %(a[href="#{issue_with_pr.pull_request.url}"])
     end
     within 'tr.issue:not(.has-pull-request) > td.subject' do
@@ -41,7 +41,7 @@ RSpec.describe 'Issue Index Page' do
 
     specify 'User sees PR status on GitHub only if an issue has a PR' do
       within 'tr.issue.has-pull-request > td.subject' do
-        expect(page).to have_selector 'a.icon-pr.merged'
+        expect(page).to have_selector 'a.icon-pr.merged[title=Merged]'
       end
     end
   end
@@ -52,7 +52,7 @@ RSpec.describe 'Issue Index Page' do
 
     specify 'User sees PR status on GitHub only if an issue has a PR' do
       within 'tr.issue.has-pull-request > td.subject' do
-        expect(page).to have_selector 'a.icon-pr.mergeable'
+        expect(page).to have_selector 'a.icon-pr.mergeable[title=Approved]'
       end
     end
   end
