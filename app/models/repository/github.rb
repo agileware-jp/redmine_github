@@ -23,4 +23,16 @@ class Repository::Github < ::Repository::Git
     fetch_remote
     super
   end
+
+  def login=(secret)
+    # TODO encrypt
+    write_attribute(:login, secret)
+  end
+
+  def login
+    read_attribute(:login)
+  end
+
+  alias access_token password
+  alias webhook_secret login
 end

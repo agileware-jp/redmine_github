@@ -10,12 +10,18 @@ module GithubHelper
             disabled: !repository.safe_attribute?('url')
     ) +
     scm_path_info_tag(repository)) +
-      content_tag('p', form.text_field(:login, size: 30)) +
       content_tag('p', form.password_field(
                          :password, label: l(:label_github_token), size: 30, name: 'ignore',
                                     value: (repository.new_record? || repository.password.blank? ? '' : ('x' * 15)),
                                     onfocus: "this.value=''; this.name='repository[password]';",
                                     onchange: "this.name='repository[password]';"
+                       )) +
+      content_tag('p', form.password_field(
+                         :login,
+                         label: l(:label_github_webhook_secret), size: 30, name: 'ignore',
+                         value: (repository.new_record? || repository.password.blank? ? '' : ('x' * 15)),
+                         onfocus: "this.value=''; this.name='repository[login]';",
+                         onchange: "this.name='repository[login]';"
                        )) +
       scm_path_encoding_tag(form, repository) +
       content_tag('p', form.check_box(

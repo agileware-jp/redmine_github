@@ -1,2 +1,3 @@
 en:
   label_github_token: Access Token
+  label_github_webhook_secret: Webhook Secret

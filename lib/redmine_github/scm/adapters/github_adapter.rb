@@ -23,8 +23,7 @@ module RedmineGithub::Scm::Adapters
       parsed_url = URI.parse(url)
 
       # uri = url or "#{login}@url" or "#{login}:#{password}@url"
-      parsed_url.user = ERB::Util.url_encode(@login) if @login.present?
-      parsed_url.password = ERB::Util.url_encode(@password) if @password.present?
+      parsed_url.user = ERB::Util.url_encode(access_token) if access_token.present?
       parsed_url.to_s
     end
 
@@ -42,6 +41,12 @@ module RedmineGithub::Scm::Adapters
       cmd_args += %w[+refs/heads/*:refs/heads/* +refs/tags/*:refs/tags/*]
       cmd_args += %w[--prune]
       git_cmd(cmd_args)
+    end
+
+    private
+
+    def access_token
+      @password
     end
   end
 end
