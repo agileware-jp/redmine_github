@@ -7,7 +7,7 @@ RSpec.describe 'POST /redmine_github/webhook/' do
     shared_examples 'call handler with correct arguments and return http ok' do
       it {
         headers = { 'x-hub-signature' => signature, 'x-github-event' => event, content_type: :json }
-        expect(RedmineGithub::PullRequestHandler).to receive(:handle).with(event, be_an_instance_of(ActionController::Parameters))
+        expect(RedmineGithub::PullRequestHandler).to receive(:handle).with(repository, event, be_an_instance_of(ActionController::Parameters))
         post redmine_github_webhook_path(repository_id: repository.id.to_s, format: :json), params: params, headers: headers
         expect(response).to have_http_status(:ok)
       }

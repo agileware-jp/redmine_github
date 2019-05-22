@@ -3,8 +3,10 @@
 require File.expand_path('../../rails_helper', __dir__)
 
 RSpec.describe RedmineGithub::PullRequestHandler do
+  let(:repository) { create(:github_repository) }
+
   describe '.handle pull_request' do
-    subject { RedmineGithub::PullRequestHandler.handle('pull_request', payload) }
+    subject { RedmineGithub::PullRequestHandler.handle(repository, 'pull_request', payload) }
 
     context 'action is "opened"' do
       let(:payload) do
@@ -50,20 +52,20 @@ RSpec.describe RedmineGithub::PullRequestHandler do
   end
 
   describe '.handle pull_request_review' do
-    subject { RedmineGithub::PullRequestHandler.handle('pull_request_review', payload) }
+    subject { RedmineGithub::PullRequestHandler.handle(repository, 'pull_request_review', payload) }
 
     let(:payload) { {} }
 
     it {
       expect(RedmineGithub::PullRequestHandler).to(
-        receive(:handle_pull_request).with(payload)
+        receive(:handle_pull_request).with(repository, payload)
       )
       subject
     }
   end
 
   describe '.handle push' do
-    subject { RedmineGithub::PullRequestHandler.handle('push', payload) }
+    subject { RedmineGithub::PullRequestHandler.handle(repository, 'push', payload) }
 
     let(:payload) { { 'ref' => ref } }
     let!(:issue) { create :issue }
@@ -89,7 +91,7 @@ RSpec.describe RedmineGithub::PullRequestHandler do
   end
 
   describe '.handle status' do
-    subject { RedmineGithub::PullRequestHandler.handle('status', payload) }
+    subject { RedmineGithub::PullRequestHandler.handle(repository, 'status', payload) }
 
     let(:payload) { { 'branches' => [{ name: branch }] } }
     let!(:issue) { create :issue }
