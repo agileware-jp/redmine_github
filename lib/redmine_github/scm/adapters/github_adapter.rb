@@ -9,6 +9,7 @@ module RedmineGithub::Scm::Adapters
       @access_token = access_token
       @webhook_secret = webhook_secret
       @root_url = root_url.blank? ? retrieve_root_url : root_url
+      @path_encoding = path_encoding.blank? ? 'UTF-8' : path_encoding
     end
 
     def repositories_root_path
