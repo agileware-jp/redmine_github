@@ -7,7 +7,7 @@ module RedmineGithub
       event = request.headers['x-github-event']
       case event
       when 'pull_request', 'pull_request_review', 'push', 'status'
-        PullRequestHandler.handle(event, params)
+        PullRequestHandler.handle(@repository, event, params)
         head :ok
       else
         # ignore
