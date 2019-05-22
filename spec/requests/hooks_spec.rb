@@ -50,5 +50,13 @@ RSpec.describe 'POST /redmine_github/webhook/' do
       let(:event) { 'unknown' }
       include_examples 'ignored and return http ok'
     end
+
+    context 'signure is wrong' do
+      it {
+        headers = { 'x-hub-signature' => 'bad-signature', 'x-github-event' => 'status', content_type: :json }
+        post redmine_github_webhook_path(repository_id: repository.id.to_s, format: :json), params: params, headers: headers
+        expect(response).to have_http_status(:bad_request)
+      }
+    end
   end
 end
