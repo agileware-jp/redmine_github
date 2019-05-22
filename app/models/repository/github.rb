@@ -20,6 +20,17 @@ class Repository::Github < ::Repository::Git
     'Github'
   end
 
+  def scm
+    unless @scm
+      @scm = self.scm_adapter.new(url, root_url,
+                                  access_token, webhook_secret, path_encoding)
+      if root_url.blank? && @scm.root_url.present?
+        update_attribute(:root_url, @scm.root_url)
+      end
+    end
+    @scm
+  end
+
   # Will be executed from background jobs as:
   # rails runner 'Repository.fetch_changesets'
   def fetch_changesets

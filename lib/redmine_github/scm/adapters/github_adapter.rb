@@ -4,6 +4,13 @@ require 'uri'
 
 module RedmineGithub::Scm::Adapters
   class GithubAdapter < Redmine::Scm::Adapters::GitAdapter
+    def initialize(url, root_url, access_token, webhook_secret, path_encoding=nil)
+      @url = url
+      @access_token = access_token
+      @webhook_secret = webhook_secret
+      @root_url = root_url.blank? ? retrieve_root_url : root_url
+    end
+
     def repositories_root_path
       repo_path = Rails.root.join('repositories')
 
@@ -23,7 +30,7 @@ module RedmineGithub::Scm::Adapters
       parsed_url = URI.parse(url)
 
       # uri = url or "#{login}@url"
-      parsed_url.user = ERB::Util.url_encode(access_token) if access_token.present?
+      parsed_url.user = ERB::Util.url_encode(@access_token) if @access_token.present?
       parsed_url.to_s
     end
 
@@ -48,12 +55,6 @@ module RedmineGithub::Scm::Adapters
       cmd_args += %w[+refs/heads/*:refs/heads/* +refs/tags/*:refs/tags/*]
       cmd_args += %w[--prune]
       git_cmd(cmd_args)
-    end
-
-    private
-
-    def access_token
-      @password
     end
   end
 end
