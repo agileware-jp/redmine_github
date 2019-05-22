@@ -8,9 +8,9 @@ class Repository::Github < ::Repository::Git
   safe_attributes 'access_token', 'webhook_secret'
   validates_presence_of :url
 
-  delegate :bare_clone, :fetch_remote, to: :scm
+  delegate :bare_clone, :fetch_remote, :update_remote_url, to: :scm
   after_create :bare_clone
-  after_update :fetch_remote
+  after_update :update_remote_url
 
   def self.scm_adapter_class
     RedmineGithub::Scm::Adapters::GithubAdapter

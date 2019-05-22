@@ -22,7 +22,7 @@ module RedmineGithub::Scm::Adapters
     def url_with_token
       parsed_url = URI.parse(url)
 
-      # uri = url or "#{login}@url" or "#{login}:#{password}@url"
+      # uri = url or "#{login}@url"
       parsed_url.user = ERB::Util.url_encode(access_token) if access_token.present?
       parsed_url.to_s
     end
@@ -34,9 +34,16 @@ module RedmineGithub::Scm::Adapters
       git_cmd(cmd_args)
     end
 
+    def update_remote_url
+      cmd_args = %W[remote set-url origin #{url_with_token}]
+
+      git_cmd(cmd_args)
+    end
+
     def fetch_remote
       return unless Dir.exist?(root_url)
 
+      ENV['GIT_TERMINAL_PROMPT'] = '0'
       cmd_args = %w[fetch origin]
       cmd_args += %w[+refs/heads/*:refs/heads/* +refs/tags/*:refs/tags/*]
       cmd_args += %w[--prune]
