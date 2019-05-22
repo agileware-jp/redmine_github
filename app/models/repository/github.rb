@@ -4,6 +4,7 @@ require_dependency 'repository/git'
 
 class Repository::Github < ::Repository::Git
   has_one :github_credential, foreign_key: :repository_id
+  accepts_nested_attributes_for :github_credential
 
   safe_attributes 'access_token', 'webhook_secret'
   validates_presence_of :url
@@ -48,7 +49,7 @@ class Repository::Github < ::Repository::Git
 
   def webhook_secret=(secret)
     build_github_credential if github_credential.blank?
-    github_credential.webhook_secret = secret
+    assign_attributes(github_credential_attributes: { id: github_credential.id, webhook_secret: secret })
   end
 
   def webhook_secret
