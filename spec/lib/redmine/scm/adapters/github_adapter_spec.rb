@@ -3,10 +3,9 @@
 require File.expand_path('../../../../rails_helper', __dir__)
 
 RSpec.describe RedmineGithub::Scm::Adapters::GithubAdapter do
-  let(:scm) { RedmineGithub::Scm::Adapters::GithubAdapter.new(url, nil, login, token) }
+  let(:scm) { RedmineGithub::Scm::Adapters::GithubAdapter.new(url, nil, access_token, nil) }
   let(:url) { 'https://github.com/company/repo.git' }
-  let(:login) { 'user' }
-  let(:token) { '1234567890' }
+  let(:access_token) { '1234567890' }
 
   before :each do
     # will not try to create directory if it does not exists
@@ -37,20 +36,13 @@ RSpec.describe RedmineGithub::Scm::Adapters::GithubAdapter do
   describe '.url_with_token' do
     subject { scm.url_with_token }
     context 'no login and token are provided' do
-      let(:login) { nil }
-      let(:token) { nil }
+      let(:access_token) { nil }
 
       it { is_expected.to eq url }
     end
 
-    context 'only login is provided' do
-      let(:token) { nil }
-
-      it { is_expected.to eq "https://#{login}@github.com/company/repo.git" }
-    end
-
     context 'login and token are provided' do
-      it { is_expected.to eq "https://#{login}:#{token}@github.com/company/repo.git" }
+      it { is_expected.to eq "https://#{access_token}@github.com/company/repo.git" }
     end
   end
 

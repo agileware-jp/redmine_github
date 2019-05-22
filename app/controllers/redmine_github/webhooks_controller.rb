@@ -24,7 +24,7 @@ module RedmineGithub
     def verify_signature
       request.body.rewind
       signature = 'sha1=' + OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha1'), @repository.webhook_secret, request.body.read)
-      head :bad_request unless Rack::Utils.secure_compare(signature, request.env['HTTP_X_HUB_SIGNATURE'])
+      head :bad_request unless Rack::Utils.secure_compare(signature, request.headers['x-hub-signature'])
     end
   end
 end
