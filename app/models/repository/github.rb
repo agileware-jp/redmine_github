@@ -3,6 +3,9 @@
 require_dependency 'repository/git'
 
 class Repository::Github < ::Repository::Git
+  has_one :github_credential, foreign_key: :repository_id
+
+  safe_attributes 'access_token', 'webhook_secret'
   validates_presence_of :url
 
   delegate :bare_clone, :fetch_remote, to: :scm
@@ -24,15 +27,21 @@ class Repository::Github < ::Repository::Git
     super
   end
 
-  def login=(secret)
-    # TODO encrypt
-    write_attribute(:login, secret)
+  def access_token=(token)
+    self.password = token
   end
 
-  def login
-    read_attribute(:login)
+  def access_token
+    password
   end
 
-  alias access_token password
-  alias webhook_secret login
+  def webhook_secret=(secret)
+    build_github_credential if github_credential.blank?
+    github_credential.webhook_secret = secret
+  end
+
+  def webhook_secret
+    build_github_credential if github_credential.blank?
+    github_credential.webhook_secret
+  end
 end
