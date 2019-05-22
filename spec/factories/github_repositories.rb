@@ -5,8 +5,8 @@ FactoryBot.define do
     type { 'Repository::Github' }
     project
     sequence(:url) { |n| "https://github.com/company/repo#{n}.git" }
-    sequence(:login) { |n| "user #{n}" }
-    password { 'password' }
+    access_token { '0x123456789' }
+    webhook_secret { 'secret' }
     sequence(:identifier) { |n| "github-identifier-#{n}" }
 
     before(:create) { Repository::Github.skip_callback(:create, :after, :bare_clone) }
