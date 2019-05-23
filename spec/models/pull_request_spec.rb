@@ -78,7 +78,7 @@ RSpec.describe PullRequest do
       repository = create :github_repository, url: 'https://github.com/owner/repo.git'
       client_stub = double('client')
       expect(client_stub).to receive(:fetch_pull_request).with(pull_request).and_return(result)
-      expect(RedmineGithub::GithubAPI).to receive(:client_by_repository).with(repository).and_return(client_stub)
+      expect(RedmineGithub::GithubAPI::Graphql).to receive(:client_by_repository).with(repository).and_return(client_stub)
     end
 
     let(:result) do

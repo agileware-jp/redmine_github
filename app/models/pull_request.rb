@@ -36,7 +36,7 @@ class PullRequest < ActiveRecord::Base
   def sync
     return unless repository
 
-    ret = RedmineGithub::GithubAPI.client_by_repository(repository).fetch_pull_request(self)
+    ret = RedmineGithub::GithubAPI::Graphql.client_by_repository(repository).fetch_pull_request(self)
     return if ret.errors.any? # TODO: logging
 
     pr = ret.data.repository.pull_request
