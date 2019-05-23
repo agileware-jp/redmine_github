@@ -3,7 +3,7 @@
 require File.expand_path('../rails_helper', __dir__)
 
 RSpec.describe 'Issue Index Page' do
-  let!(:issue_with_pr) {
+  let!(:issue_with_pr) do
     create(
       :issue,
       :with_pull_request,
@@ -11,7 +11,7 @@ RSpec.describe 'Issue Index Page' do
       pull_request_merged_at: merged_at,
       pull_request_mergeable_state: mergeable_state
     )
-  }
+  end
   let!(:issue_without_pr) { create(:issue, subject: 'Issue without PR') }
   let(:merged_at) { nil }
   let(:mergeable_state) { 'BLOCKED' }

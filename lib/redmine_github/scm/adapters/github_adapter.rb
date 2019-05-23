@@ -4,7 +4,7 @@ require 'uri'
 
 module RedmineGithub::Scm::Adapters
   class GithubAdapter < Redmine::Scm::Adapters::GitAdapter
-    def initialize(url, root_url, access_token, webhook_secret, path_encoding=nil)
+    def initialize(url, root_url, access_token, webhook_secret, path_encoding = nil)
       @url = url
       @access_token = access_token
       @webhook_secret = webhook_secret
