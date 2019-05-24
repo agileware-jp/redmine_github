@@ -52,7 +52,7 @@ After pressing _'Create'_ button, bare-clone repository will be created inside y
 
 > Note the **repository ID** in the _'Edit'_ and _'Delete'_ links - you will need this for the next step (webhook url)
 
-### 3. Connectiong Github to Redmine
+### 3. Connecting Github to Redmine
 
 1. Go to the repository _Settings_ interface on GitHub.
 2. Under _Webhooks_ add a new webHook:
