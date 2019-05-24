@@ -14,16 +14,16 @@ module RedmineGithub
           Client.new(base_url, access_token).get
         end
 
-        def create(payload)
-          Client.new(base_url, access_token).post(payload)
+        def create(params)
+          Client.new(base_url, access_token).post(params.to_json)
         end
 
         def show(id)
           Client.new(base_url(id), access_token).get
         end
 
-        def update(id, payload)
-          Client.new(base_url(id), access_token).patch(payload)
+        def update(id, params)
+          Client.new(base_url(id), access_token).patch(params.to_json)
         end
 
         def destroy(id)

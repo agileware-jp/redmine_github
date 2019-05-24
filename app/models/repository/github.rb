@@ -3,7 +3,7 @@
 require_dependency 'repository/git'
 
 class Repository::Github < ::Repository::Git
-  has_one :github_credential, foreign_key: :repository_id
+  has_one :github_credential, foreign_key: :repository_id, dependent: :destroy
   accepts_nested_attributes_for :github_credential
 
   safe_attributes 'access_token', 'webhook_secret'
