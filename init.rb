@@ -3,7 +3,7 @@
 Redmine::Plugin.register :redmine_github do
   name 'Redmine Github plugin'
   author 'Agileware Inc.'
-  description 'Redmine plugin for connecting Github'
+  description 'Redmine plugin for connecting to Github repositories'
   version '0.0.1'
   author_url 'https://agileware.jp/'
 end
