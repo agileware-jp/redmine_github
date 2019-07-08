@@ -3,7 +3,7 @@
 require_dependency 'repository/git'
 
 class Repository::Github < ::Repository::Git
-  has_one :github_credential, foreign_key: :repository_id
+  has_one :github_credential, foreign_key: :repository_id, dependent: :destroy
   accepts_nested_attributes_for :github_credential
 
   safe_attributes 'access_token', 'webhook_secret'
@@ -23,11 +23,9 @@ class Repository::Github < ::Repository::Git
 
   def scm
     unless @scm
-      @scm = self.scm_adapter.new(url, root_url,
-                                  access_token, webhook_secret, path_encoding)
-      if root_url.blank? && @scm.root_url.present?
-        update_column(:root_url, @scm.root_url.to_s)
-      end
+      @scm = scm_adapter.new(url, root_url,
+                             access_token, webhook_secret, path_encoding)
+      update_column(:root_url, @scm.root_url.to_s) if root_url.blank? && @scm.root_url.present?
     end
     @scm
   end
@@ -55,5 +53,19 @@ class Repository::Github < ::Repository::Git
   def webhook_secret
     build_github_credential if github_credential.blank?
     github_credential.webhook_secret
+  end
+
+  def owner
+    scan_url if @owner.nil?
+    @owner
+  end
+
+  def repo
+    scan_url if @repo.nil?
+    @repo
+  end
+
+  def scan_url
+    @owner, @repo = url.to_s.scan(%r{https://github.com/(.+)/(.+).git}).flatten
   end
 end
