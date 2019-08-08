@@ -13,8 +13,6 @@ Redmine::Scm::Base.add('Github')
 RedmineGithub::Reloader.to_prepare do
   require_dependency 'redmine_github/hooks'
 
-  User.include RedmineGithub::UserPatch
-
   Issue.include RedmineGithub::Include::IssuePatch
   Issue.prepend RedmineGithub::Prepend::IssuePatch
 
