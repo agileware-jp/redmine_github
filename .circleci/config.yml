@@ -19,7 +19,7 @@ orbs:
               command: |
                 set -e
                 if [ ! -d ~/redmine-<< parameters.redmine_version >> ]; then
-                  curl http://redmine.org/releases/redmine-<< parameters.redmine_version >>.tar.gz | tar zx
+                  curl http://www.redmine.org/releases/redmine-<< parameters.redmine_version >>.tar.gz | tar zx
                 fi
           - save_cache:
               key: '{{ .Environment.CACHE_VERSION }}-redmine-download-<< parameters.redmine_version >>'
