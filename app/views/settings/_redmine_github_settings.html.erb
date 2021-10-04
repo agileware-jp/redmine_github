@@ -1,0 +1,8 @@
+<fieldset class="box">
+  <legend> <%= t('setting_redmine_github_title') %></legend>
+  <p>
+  <%= setting_label('webhook_use_hostname') %>
+  <%= hidden_field_tag("settings[webhook_use_hostname]", 0, :id => nil) %>
+  <%= check_box_tag("settings[webhook_use_hostname]", 1, @settings['webhook_use_hostname'].to_s != '0') %>
+  </p>
+</fieldset>

@@ -8,7 +8,7 @@ RSpec.describe PullRequest do
 
     it do
       pull_request.valid?
-      expect(pull_request.errors.full_messages).to include 'URL cannot be blank'
+      expect(pull_request.errors.full_messages).to include 'URL を入力してください'
     end
   end
 

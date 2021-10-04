@@ -1,3 +1,5 @@
 ja:
   label_github_token: アクセストークン
   label_github_webhook_secret: Webhook Secret
+  setting_redmine_github_title: Redmine Github プラギン設定
+  setting_webhook_use_hostname: Webhookリクエストでhostnameを使います
