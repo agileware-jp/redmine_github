@@ -124,9 +124,3 @@ workflows:
           ruby_version: '2.6'
           db: pg
           <<: *ignore_trial
-     - rspec:
-          name: Redmine 3.4
-          redmine_version: '3.4.13'
-          ruby_version: '2.3'
-          db: mysql
-          db_version: '5.7-ram'
