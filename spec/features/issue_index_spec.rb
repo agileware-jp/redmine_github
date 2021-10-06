@@ -17,6 +17,7 @@ RSpec.describe 'Issue Index Page' do
   let(:mergeable_state) { 'BLOCKED' }
 
   before do
+    login_as(create(:admin_user))
     visit issues_path
   end
 

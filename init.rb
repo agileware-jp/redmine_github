@@ -4,8 +4,11 @@ Redmine::Plugin.register :redmine_github do
   name 'Redmine Github plugin'
   author 'Agileware Inc.'
   description 'Redmine plugin for connecting to Github repositories'
-  version '0.0.1'
+  version '0.1.1'
   author_url 'https://agileware.jp/'
+
+  settings default: { webhook_use_hostname: 0 },
+           partial: 'settings/redmine_github_settings'
 end
 
 Redmine::Scm::Base.add('Github')
