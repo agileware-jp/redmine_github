@@ -1,181 +1,132 @@
 version: 2.1
 
 orbs:
-  redmine:
-    commands:
-      download:
-        description: Download Redmine << parameters.redmine_version >>
+  redmine-plugin: agileware-jp/redmine-plugin@2.1.0
+  rubocop:
+    executors:
+      rubocop-executor:
         parameters:
-          redmine_version:
-            description: version of Redmine
-            type: string
-        steps:
-          - restore_cache:
-              keys:
-                - '{{ .Environment.CACHE_VERSION }}-redmine-download-<< parameters.redmine_version >>'
-          - run:
-              name: Download Redmine << parameters.redmine_version >>
-              working_directory: '~/'
-              command: |
-                set -e
-                if [ ! -d ~/redmine-<< parameters.redmine_version >> ]; then
-                  curl http://www.redmine.org/releases/redmine-<< parameters.redmine_version >>.tar.gz | tar zx
-                fi
-          - save_cache:
-              key: '{{ .Environment.CACHE_VERSION }}-redmine-download-<< parameters.redmine_version >>'
-              paths: ~/redmine-<< parameters.redmine_version >>
-      setup:
-        description: Setup Redmine
-        parameters:
-          db:
-            description: Database
-            type: string
-          redmine_version:
-            description: version of Redmine
-            type: string
           ruby_version:
             description: version of Ruby
             type: string
+            default: latest
+        docker:
+          - image: circleci/ruby:<<parameters.ruby_version>>
+    commands:
+      install-rubocop:
+        parameters:
+          rubocop_version:
+            description: version of Rubocop
+            type: string
+            default: ''
         steps:
-          - restore_cache:
-              keys:
-                - '{{ .Environment.CACHE_VERSION }}-redmine-setup-<< parameters.ruby_version >>-<< parameters.redmine_version >>-<< parameters.db >>-{{ checksum "Gemfile.local" }}'
           - run:
-              name: Setup Redmine << parameters.redmine_version >>
-              working_directory: ~/redmine-<< parameters.redmine_version >>
+              name: install rubocop << parameters.rubocop_version >>
               command: |
-                bundle check || bundle install --without rmagick
-          - save_cache:
-              key: '{{ .Environment.CACHE_VERSION }}-redmine-setup-<< parameters.ruby_version >>-<< parameters.redmine_version >>-<< parameters.db >>-{{ checksum "Gemfile.local" }}'
-              paths:
-                - ~/.bundle
-                - ~/redmine-<< parameters.redmine_version >>/Gemfile.lock
-          - run:
-              name: Setup Database
-              working_directory: ~/redmine-<< parameters.redmine_version >>
-              command: |
-                bundle exec rake db:create db:migrate
-          - run:
-              name: Setup plugins
-              working_directory: ~/redmine-<< parameters.redmine_version >>
-              command: |
-                bundle exec rake redmine:plugins
-
-executors:
-  ruby-pg:
-    parameters:
-      ruby_version:
-        description: version of Ruby
-        type: string
-    docker:
-      - image: circleci/ruby:<< parameters.ruby_version >>-node-browsers
-      - image: circleci/postgres:latest
-  ruby-mysql:
-    parameters:
-      ruby_version:
-        description: version of Ruby
-        type: string
-    docker:
-      - image: circleci/ruby:<< parameters.ruby_version >>-node-browsers
-      - image: circleci/mysql:5.7
-        environment:
-          - MYSQL_ALLOW_EMPTY_PASSWORD: true
-          - MYSQL_ROOT_HOST: '%'
+                set -e
+                if [ <<parameters.rubocop_version>> ]; then
+                  gem install rubocop -v '<< parameters.rubocop_version >>'
+                else
+                  gem install rubocop
+                fi
+      install-cop-from-github:
+        parameters:
+          url:
+            description: URL of Git repository of custom cop
+            type: string
+        steps:
+          - run: git clone << parameters.url >> /tmp/cop-repo && cd /tmp/cop-repo && rake install && cd / && rm -rf /tmp/cop-repo
+      install-cop-from-gem:
+        parameters:
+          gem-name:
+            description: name of gem
+            type: string
+        steps:
+          - run: gem install << parameters.gem-name >>
+      run-cops:
+        parameters:
+          rubocop_option:
+            description: CLI option for rubocop
+            type: string
+            default: '--format simple'
+        steps:
+          - run: rubocop << parameters.rubocop_option >>
 
 jobs:
-  rspec:
+  rubocop:
     parameters:
-      db:
-        default: pg
-        description: Database
+      rubocop_config_path:
+        description: path to rubocop config yaml
         type: string
-      redmine_plugin:
-        default: redmine_github
-        description: name of Redmine plugin
+      rubocop_files:
+        description: files to check by rubocop
         type: string
-      redmine_version:
-        description: version of Redmine
-        type: string
-      ruby_version:
-        description: version of Ruby
-        type: string
-    environment:
-      BUNDLE_PATH: ~/.bundle
-      COVERAGE: true
-      RAILS_ENV: test
-    executor:
-      name: ruby-<< parameters.db >>
-      ruby_version: << parameters.ruby_version >>
+        default: '~/project'
+    executor: rubocop/rubocop-executor
     steps:
       - checkout
-      - redmine/download:
-          redmine_version: << parameters.redmine_version >>
-      - run:
-          name: Setup << parameters.redmine_plugin >>
-          working_directory: ~/redmine-<< parameters.redmine_version >>
-          command: |
-            set -e
-            ln -s ~/project ~/redmine-<< parameters.redmine_version >>/plugins/<< parameters.redmine_plugin >>
-            ln -s ~/project/Gemfile.local Gemfile.local
-      - run:
-          name: Generate database.yml
-          working_directory: ~/redmine-<< parameters.redmine_version >>
-          command: |
-            cp plugins/<< parameters.redmine_plugin >>/.circleci/database.yml.<< parameters.db >> config/database.yml
-      - redmine/setup:
-          db: << parameters.db >>
-          redmine_version: << parameters.redmine_version >>
-          ruby_version: << parameters.ruby_version >>
-      - run:
-          name: Run Rubocop
-          working_directory: ~/redmine-<< parameters.redmine_version >>
-          command: |
-            bundle exec rubocop --format simple --fail-level E --config plugins/<< parameters.redmine_plugin >>/.rubocop.yml ./plugins/<< parameters.redmine_plugin >>
-      - run:
-          name: Setup RSpec
-          working_directory: ~/redmine-<< parameters.redmine_version >>
-          command: |
-            bundle exec rails generate rspec:install
-      - run:
-          name: Run RSpec
-          working_directory: ~/redmine-<< parameters.redmine_version >>
-          command: |
-            bundle exec rspec --format progress --format RspecJunitFormatter -o ~/rspec/rspec.xml plugins/<< parameters.redmine_plugin >>/spec
+      - rubocop/install-rubocop:
+          rubocop_version: '~> 0.93.1'
+      - rubocop/install-cop-from-gem:
+          gem-name: rubocop-rails
+      - rubocop/install-cop-from-gem:
+          gem-name: rubocop-rspec
+      - rubocop/install-cop-from-gem:
+          gem-name: rubocop-performance
+      - rubocop/run-cops:
+          rubocop_option: --fail-level E --display-only-fail-level-offenses -f s -c << parameters.rubocop_config_path >> << parameters.rubocop_files >>
+  rspec:
+    parameters:
+      redmine_version:
+        type: string
+      ruby_version:
+        type: string
+        default: '2.3'
+      db:
+        type: enum
+        enum: ['mysql', 'pg']
+        default: pg
+      db_version:
+        type: string
+        default: 'latest-ram'
+    executor:
+      name: redmine-plugin/ruby-<< parameters.db >>
+      ruby_version: << parameters.ruby_version >>
+      db_version: << parameters.db_version >>
+    steps:
+      - checkout
+      - redmine-plugin/download-redmine:
+          version: << parameters.redmine_version >>
+      - redmine-plugin/install-self
+      - redmine-plugin/generate-database_yml
+      - redmine-plugin/bundle-install
+      - redmine-plugin/rspec
       - store_artifacts:
-          path: ~/redmine-<< parameters.redmine_version >>/plugins/<< parameters.redmine_plugin >>/coverage
-          destination: coverage
-      - store_artifacts:
-          path: ~/rspec/rspec.xml
-          destination: rspec.xml
-      - store_test_results:
-          path: ~/rspec
-      - run:
-          name: Test migration rollback
-          working_directory: ~/redmine-<< parameters.redmine_version >>
-          command: |
-            bin/rake redmine:plugins:migrate NAME=<< parameters.redmine_plugin >> VERSION=0
+          path: redmine/tmp/capybara
+          destination: screenshots
+
+ignore_trial: &ignore_trial
+  filters:
+    branches:
+      ignore:
+        - trial
 
 workflows:
   version: 2
   test:
     jobs:
+      - rubocop:
+          rubocop_config_path: ~/project/.rubocop.yml
+          <<: *ignore_trial
       - rspec:
-          name: 'Ruby 2.4 Redmine 3.4.10 PostgreSQL'
+          name: Redmine 4.1
+          redmine_version: '4.1.1'
+          ruby_version: '2.6'
           db: pg
-          redmine_version: '3.4.10'
-          ruby_version: '2.4'
-      - rspec:
-          name: 'Ruby 2.4 Redmine 3.4.10 MySQL'
+          <<: *ignore_trial
+     - rspec:
+          name: Redmine 3.4
+          redmine_version: '3.4.13'
+          ruby_version: '2.3'
           db: mysql
-          redmine_version: '3.4.10'
-          ruby_version: '2.4'
-      - rspec:
-          name: 'Ruby 2.4 Redmine 4.0.3 PostgreSQL'
-          db: pg
-          redmine_version: '4.0.3'
-          ruby_version: '2.4'
-      - rspec:
-          name: 'Ruby 2.4 Redmine 4.0.3 MySQL'
-          db: mysql
-          redmine_version: '4.0.3'
-          ruby_version: '2.4'
+          db_version: '5.7-ram'
