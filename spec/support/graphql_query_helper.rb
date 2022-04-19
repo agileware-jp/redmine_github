@@ -8,7 +8,7 @@ module GraphqlQueryHelper
       .with(body: request).to_return(status: 200, body: response)
   end
 
-  def graphpl_json_for(id, variables = {})
+  def graphql_json_for(id, variables = {})
     path = "#{ROOT_PATH}/#{id}.json"
     erb_path = "#{path}.erb"
     if File.exist?(erb_path)

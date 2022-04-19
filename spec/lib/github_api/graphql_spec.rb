@@ -5,8 +5,8 @@ require File.expand_path('../../rails_helper', __dir__)
 RSpec.describe RedmineGithub::GithubAPI::Graphql do
   before do
     graphql_mock(
-      request: graphpl_json_for(:load_schema_request),
-      response: graphpl_json_for(:load_schema_response)
+      request: graphql_json_for(:load_schema_request),
+      response: graphql_json_for(:load_schema_response)
     )
   end
 
@@ -19,12 +19,12 @@ RSpec.describe RedmineGithub::GithubAPI::Graphql do
     let(:mergeable_state) { 'CLEAN' }
 
     before do
-      request = graphpl_json_for(:fetch_pr_request,
+      request = graphql_json_for(:fetch_pr_request,
                                  repository_id: repository.id,
                                  pull_request_number: pull_request.number,
                                  repo_owner: pull_request.repo_owner,
                                  repo_name: pull_request.repo_name)
-      response = graphpl_json_for(:fetch_pr_response,
+      response = graphql_json_for(:fetch_pr_response,
                                   merged_at: merged_at,
                                   mergeable_state: mergeable_state)
       graphql_mock(request: request, response: response)
