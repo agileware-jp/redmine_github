@@ -12,7 +12,7 @@ RSpec.describe RepositoriesController, type: :controller do
     login_as(admin)
     allow_any_instance_of(RepositoriesController).to receive(:authorize) { true }
     # interupt Github webhook API POST requests
-    allow_any_instance_of(RedmineGithub::GithubAPI::Rest::Client).to receive(:post) { nil }
+    allow_any_instance_of(RedmineGithub::GithubApi::Rest::Client).to receive(:post) { nil }
   end
 
   context 'create repository' do
@@ -29,7 +29,7 @@ RSpec.describe RepositoriesController, type: :controller do
     end
 
     it 'should send webhooks API request' do
-      expect_any_instance_of(RedmineGithub::GithubAPI::Rest::Webhook).to receive(:create)
+      expect_any_instance_of(RedmineGithub::GithubApi::Rest::Webhook).to receive(:create)
       Repository::Github.skip_callback(:create, :after, :bare_clone)
       fixed_params = Rails::VERSION::MAJOR < 5 ? params : { params: params }
       expect(post :create, fixed_params).to redirect_to(settings_project_path(project, tab: :repositories))

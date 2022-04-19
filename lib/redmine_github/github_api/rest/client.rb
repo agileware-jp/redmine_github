@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module RedmineGithub
-  module GithubAPI
+  module GithubApi
     module Rest
       class Client
         def initialize(uri, access_token)

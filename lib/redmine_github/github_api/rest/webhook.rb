@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module RedmineGithub
-  module GithubAPI
+  module GithubApi
     module Rest
       class Webhook
         delegate :owner, :repo, :access_token, to: :repository
