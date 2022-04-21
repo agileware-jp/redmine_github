@@ -4,7 +4,7 @@ require 'graphql/client'
 require 'graphql/client/http'
 
 module RedmineGithub
-  module GithubAPI
+  module GithubApi
     module Graphql
       END_POINT = 'https://api.github.com/graphql'
 

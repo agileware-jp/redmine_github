@@ -6,7 +6,7 @@ group :development, :test do
 end
 
 group :development do
-  gem 'rubocop', '~> 0.76.0'
+  gem 'rubocop', '~> 0.76.0' unless dependencies.detect { |d| d.name == 'rubocop' }
 end
 
 group :test do

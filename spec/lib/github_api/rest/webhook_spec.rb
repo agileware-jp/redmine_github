@@ -2,14 +2,14 @@
 
 require File.expand_path('../../../rails_helper', __dir__)
 
-RSpec.describe RedmineGithub::GithubAPI::Rest::Webhook do
+RSpec.describe RedmineGithub::GithubApi::Rest::Webhook do
   GITHUB_API_URL = 'https://api.github.com/repos/company/repo/hooks'
 
   let(:project) { create :project }
   let(:webhook_url) { "https://host.site/project/#{project.id}/hook" }
   let(:events) { %w[pull_request pull_request_review push status] }
   let(:repository) { create :github_repository, url: 'https://github.com/company/repo.git' }
-  let(:new_webhook) { RedmineGithub::GithubAPI::Rest::Webhook.new(repository) }
+  let(:new_webhook) { RedmineGithub::GithubApi::Rest::Webhook.new(repository) }
   let(:params) do
     {
       config: {

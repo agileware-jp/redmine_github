@@ -12,7 +12,7 @@ module RedmineGithub
         after_action lambda {
           return if !@repository.is_a?(Repository::Github) || @repository.invalid?
 
-          RedmineGithub::GithubAPI::Rest::Webhook.new(@repository).create(
+          RedmineGithub::GithubApi::Rest::Webhook.new(@repository).create(
             config: {
               url: repository_webhook_url,
               content_type: 'json',

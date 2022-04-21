@@ -2,7 +2,7 @@
 
 require File.expand_path('../../rails_helper', __dir__)
 
-RSpec.describe RedmineGithub::GithubAPI::Graphql do
+RSpec.describe RedmineGithub::GithubApi::Graphql do
   before do
     graphql_mock(
       request: graphql_json_for(:load_schema_request),
