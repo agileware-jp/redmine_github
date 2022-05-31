@@ -13,8 +13,9 @@ end
 
 Redmine::Scm::Base.add('Github')
 
-RedmineGithub::Reloader.to_prepare do
-  require_dependency 'redmine_github/hooks'
+Rails.application.config.after_initialize do
+  require File.expand_path('../lib/redmine_github', __FILE__)
+  require File.expand_path('../lib/redmine_github/hooks', __FILE__)
 
   Issue.include RedmineGithub::Include::IssuePatch
   Issue.prepend RedmineGithub::Prepend::IssuePatch
