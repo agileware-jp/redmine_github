@@ -44,7 +44,7 @@ For given project, in \_(Settings|Repositories|New Repository) form enter:
 
 - _SCM_ - **Github**
 - _Identifier_ - uniq repository identifier
-- _URL_ - Github repository URL ([clone address](https://help.github.com/en/articles/which-remote-url-should-i-use#cloning-with-https-urls-recommended), starting with `https://` )
+- _URL_ - GitHub repository HTTPS URL ([clone address](https://docs.github.com/en/get-started/getting-started-with-git/about-remote-repositories#about-remote-repositories), starting with `https://`)
 - _Access Token_ - [personal access token](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line)
 - _Webhook Secret_ - [webhook secret](https://developer.github.com/webhooks/securing/)
 
