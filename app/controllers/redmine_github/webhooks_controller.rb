@@ -2,7 +2,11 @@
 
 module RedmineGithub
   class WebhooksController < ActionController::Base
+    # verifying request by X-Hub-Signature-256 header
+    skip_forgery_protection if Redmine::VERSION::MAJOR >= 5
+
     before_action :set_repository, :verify_signature
+
     def dispatch_event
       event = request.headers['x-github-event']
       case event
