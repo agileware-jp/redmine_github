@@ -6,7 +6,7 @@ RSpec.describe 'POST /redmine_github/webhook/' do
   describe 'handle' do
     shared_examples 'call handler with correct arguments and return http ok' do
       it {
-        headers = { 'x-hub-signature' => signature, 'x-github-event' => event, content_type: :json }
+        headers = { 'x-hub-signature-256' => signature, 'x-github-event' => event, content_type: :json }
         expect(RedmineGithub::PullRequestHandler).to receive(:handle).with(repository, event, be_an_instance_of(ActionController::Parameters))
         post redmine_github_webhook_path(repository_id: repository.id.to_s, format: :json), params: params, headers: headers
         expect(response).to have_http_status(:ok)
@@ -15,7 +15,7 @@ RSpec.describe 'POST /redmine_github/webhook/' do
 
     shared_examples 'ignored and return http ok' do
       it {
-        headers = { 'x-hub-signature' => signature, 'x-github-event' => event, content_type: :json }
+        headers = { 'x-hub-signature-256' => signature, 'x-github-event' => event, content_type: :json }
         expect(RedmineGithub::PullRequestHandler).to_not receive(:handle)
         post redmine_github_webhook_path(repository_id: repository.id.to_s, format: :json), params: params, headers: headers
         expect(response).to have_http_status(:ok)
@@ -23,7 +23,7 @@ RSpec.describe 'POST /redmine_github/webhook/' do
     end
 
     let(:params) { { hoge: 1 }.to_json }
-    let(:signature) { 'sha1=' + OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha1'), repository.webhook_secret, params) }
+    let(:signature) { 'sha256=' + OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), repository.webhook_secret, params) }
     let(:repository) { create(:github_repository) }
 
     context 'event type with pull_request' do
@@ -53,7 +53,7 @@ RSpec.describe 'POST /redmine_github/webhook/' do
 
     context 'signure is wrong' do
       it {
-        headers = { 'x-hub-signature' => 'bad-signature', 'x-github-event' => 'status', content_type: :json }
+        headers = { 'x-hub-signature-256' => 'bad-signature', 'x-github-event' => 'status', content_type: :json }
         post redmine_github_webhook_path(repository_id: repository.id.to_s, format: :json), params: params, headers: headers
         expect(response).to have_http_status(:bad_request)
       }
