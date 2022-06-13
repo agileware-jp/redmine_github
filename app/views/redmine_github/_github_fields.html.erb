@@ -30,6 +30,7 @@
       label: l(:label_github_webhook_secret),
       size: 30,
       name: 'ignore',
+      required: true,
       value: (repository.new_record? || repository.webhook_secret.blank? ? '' : ('x' * 15)),
       onfocus: "this.value=''; this.name='repository[webhook_secret]';",
       onchange: "this.name='repository[webhook_secret]';"
