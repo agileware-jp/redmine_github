@@ -4,7 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../rails_helper')
 
 RSpec.feature 'PluginSettings', type: :feature do
   feature 'webhook will use hostname' do
-    given(:admin) { create(:admin_user) }
+    let(:admin) { create(:admin_user) }
 
     context 'When visit plugin settings page' do
       before do
