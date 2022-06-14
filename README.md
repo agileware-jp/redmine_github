@@ -1,8 +1,8 @@
-# Redmine Github plugin
+# Redmine GitHub plugin
 
-_redmine_github_ is a Redmine plugin for connecting a local Redmine installation to a remote Github repository. The plugin allows to:
+_redmine_github_ is a Redmine plugin for connecting a local Redmine installation to a remote GitHub repository. The plugin allows to:
 
-- Syncronize remote Github repository to a local Git one - all Git-related Redmine features can be used
+- Syncronize remote GitHub repository to a local Git one - all Git-related Redmine features can be used
 - Attach pull request (PR) status icons to issues - will change in real time, when pul request status change - created, approved, merged etc.
 - Connect commit comment to issues via [Redmine commit comments keywords](<(https://www.redmine.org/projects/redmine/wiki/RedmineSettings#Referencing-issues-in-commit-messages)>)
 
@@ -43,8 +43,8 @@ After restart, also check if plugin is listed in the installed Redmine plugins l
 For given project, in \_(Settings|Repositories|New Repository) form enter:
 
 - _SCM_ - **Github**
-- _Identifier_ - uniq repository identifier
-- _URL_ - Github repository URL ([clone address](https://help.github.com/en/articles/which-remote-url-should-i-use#cloning-with-https-urls-recommended), starting with `https://` )
+- _Identifier_ - unique repository identifier
+- _URL_ - GitHub repository HTTPS URL ([clone address](https://docs.github.com/en/get-started/getting-started-with-git/about-remote-repositories#about-remote-repositories), starting with `https://`)
 - _Access Token_ - [personal access token](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line)
 - _Webhook Secret_ - [webhook secret](https://developer.github.com/webhooks/securing/)
 
@@ -52,7 +52,7 @@ After pressing _'Create'_ button, bare-clone repository will be created inside y
 
 > Note the **repository ID** in the _'Edit'_ and _'Delete'_ links - you will need this for the next step (webhook url)
 
-### 3. Connecting Github to Redmine
+### 3. Connecting GitHub to Redmine
 
 1. Go to the repository _Settings_ interface on GitHub.
 2. Under _Webhooks_ add a new webHook:
