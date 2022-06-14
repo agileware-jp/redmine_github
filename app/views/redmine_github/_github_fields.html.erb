@@ -17,6 +17,7 @@
       label: l(:label_github_token),
       size: 30,
       name: 'ignore',
+      required: true,
       value: (repository.new_record? || repository.access_token.blank? ? '' : ('x' * 15)),
       onfocus: "this.value=''; this.name='repository[access_token]';",
       onchange: "this.name='repository[access_token]';"
