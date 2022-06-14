@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  redmine-plugin: agileware-jp/redmine-plugin@2.1.0
+  redmine-plugin: agileware-jp/redmine-plugin@2.2.0
   rubocop:
     executors:
       rubocop-executor:
@@ -79,9 +79,12 @@ jobs:
     parameters:
       redmine_version:
         type: string
+      redmine_product:
+        type: string
+        default: 'redmine'
       ruby_version:
         type: string
-        default: '2.3'
+        default: 'latest'
       db:
         type: enum
         enum: ['mysql', 'pg']
@@ -97,6 +100,7 @@ jobs:
       - checkout
       - redmine-plugin/download-redmine:
           version: << parameters.redmine_version >>
+          product: << parameters.redmine_product >>
       - redmine-plugin/install-self
       - redmine-plugin/generate-database_yml
       - redmine-plugin/bundle-install
@@ -119,8 +123,19 @@ workflows:
           rubocop_config_path: ~/project/.rubocop.yml
           <<: *ignore_trial
       - rspec:
-          name: Redmine 4.1
-          redmine_version: '4.1.1'
-          ruby_version: '2.6'
+          name: RSpec on newest versions with PostgreSQL
+          redmine_version: '5.0.1'
           db: pg
+          <<: *ignore_trial
+      - rspec:
+          name: RSpec on oldest versions with MySQL
+          redmine_version: '4.0.1'
+          ruby_version: '2.4.5'
+          db: mysql
+          db_version: '5.7-ram'
+          <<: *ignore_trial
+      - rspec:
+          name: Redmica 2
+          redmine_product: 'redmica'
+          redmine_version: '2.1.0'
           <<: *ignore_trial
