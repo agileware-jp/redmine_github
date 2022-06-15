@@ -8,6 +8,8 @@ class Repository::Github < ::Repository::Git
 
   safe_attributes 'access_token', 'webhook_secret'
   validates_presence_of :url
+  validates_presence_of :access_token
+  validates_presence_of :webhook_secret
 
   delegate :bare_clone, :fetch_remote, :update_remote_url, to: :scm
   after_create :bare_clone

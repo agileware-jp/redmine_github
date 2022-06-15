@@ -1,4 +1,6 @@
 ja:
+  field_access_token: アクセストークン
+  field_webhook_secret: Webhook Secret
   label_github_token: アクセストークン
   label_github_webhook_secret: Webhook Secret
   setting_redmine_github_title: Redmine Github プラグイン設定

@@ -1,4 +1,6 @@
 en:
+  field_access_token: Access Token
+  field_webhook_secret: Webhook Secret
   label_github_token: Access Token
   label_github_webhook_secret: Webhook Secret
   setting_redmine_github_title: Redmine Github Settings

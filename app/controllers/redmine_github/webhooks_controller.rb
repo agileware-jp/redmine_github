@@ -2,7 +2,11 @@
 
 module RedmineGithub
   class WebhooksController < ActionController::Base
+    # verifying request by X-Hub-Signature-256 header
+    skip_forgery_protection if Redmine::VERSION::MAJOR >= 5
+
     before_action :set_repository, :verify_signature
+
     def dispatch_event
       event = request.headers['x-github-event']
       case event
@@ -23,8 +27,8 @@ module RedmineGithub
 
     def verify_signature
       request.body.rewind
-      signature = 'sha1=' + OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha1'), @repository.webhook_secret, request.body.read)
-      head :bad_request unless Rack::Utils.secure_compare(signature, request.headers['x-hub-signature'])
+      signature = 'sha256=' + OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), @repository.webhook_secret, request.body.read)
+      head :bad_request unless Rack::Utils.secure_compare(signature, request.headers['x-hub-signature-256'])
     end
   end
 end
