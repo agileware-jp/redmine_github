@@ -24,6 +24,20 @@ module RedmineGithub
         "#{::Setting.protocol}://#{::Setting.host_name}#{webhook_path}"
       end
 
+      def create_github_webhook_if_needed
+        return if !@repository.is_a?(Repository::Github) || @repository.invalid?
+
+        RedmineGithub::GithubApi::Rest::Webhook.new(@repository).create(
+          config: {
+            url: repository_webhook_url,
+            content_type: 'json',
+            secret: @repository.webhook_secret
+          },
+          events: %w[pull_request pull_request_review push status],
+          active: true
+        )
+      end
+
       def show_error_if_webhook_creation_is_failure
         ActiveRecord::Base.transaction do
           yield
@@ -39,20 +53,6 @@ module RedmineGithub
       rescue WebhookCreationError
         @repository.errors.add(:access_token, :invalid)
 
-      end
-
-      def create_github_webhook_if_needed
-        return if !@repository.is_a?(Repository::Github) || @repository.invalid?
-
-        RedmineGithub::GithubApi::Rest::Webhook.new(@repository).create(
-          config: {
-            url: repository_webhook_url,
-            content_type: 'json',
-            secret: @repository.webhook_secret
-          },
-          events: %w[pull_request pull_request_review push status],
-          active: true
-        )
       end
     end
   end
