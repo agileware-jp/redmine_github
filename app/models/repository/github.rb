@@ -3,6 +3,8 @@
 require_dependency 'repository/git'
 
 class Repository::Github < ::Repository::Git
+  REPOSITORY_URI_REGEXP = %r{\Ahttps://github\.com/(.+)/(.+).git}
+
   has_one :github_credential, foreign_key: :repository_id, dependent: :destroy
   accepts_nested_attributes_for :github_credential
 
@@ -68,6 +70,6 @@ class Repository::Github < ::Repository::Git
   end
 
   def scan_url
-    @owner, @repo = url.to_s.scan(%r{https://github.com/(.+)/(.+).git}).flatten
+    @owner, @repo = url.to_s.scan(REPOSITORY_URI_REGEXP).flatten
   end
 end
