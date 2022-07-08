@@ -9,7 +9,7 @@ module RedmineGithub
       included do
         helper GithubHelper
 
-        after_action :create_github_web_hook_if_needed, only: :create
+        after_action :create_github_webhook_if_needed, only: :create
       end
 
       private
@@ -21,7 +21,7 @@ module RedmineGithub
         "#{::Setting.protocol}://#{::Setting.host_name}#{webhook_path}"
       end
 
-      def create_github_web_hook_if_needed
+      def create_github_webhook_if_needed
         return if !@repository.is_a?(Repository::Github) || @repository.invalid?
 
         RedmineGithub::GithubApi::Rest::Webhook.new(@repository).create(
