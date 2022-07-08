@@ -12,7 +12,7 @@ module RedmineGithub
       included do
         helper GithubHelper
 
-        around_action :show_error_if_web_hook_creation_is_failure, only: :create
+        around_action :show_error_if_webhook_creation_is_failure, only: :create
       end
 
       private
@@ -24,7 +24,7 @@ module RedmineGithub
         "#{::Setting.protocol}://#{::Setting.host_name}#{webhook_path}"
       end
 
-      def show_error_if_web_hook_creation_is_failure
+      def show_error_if_webhook_creation_is_failure
         ActiveRecord::Base.transaction do
           yield
 
@@ -35,9 +35,10 @@ module RedmineGithub
             logger.debug { "backtrace:\n#{e.backtrace.join("\n")}" }
             raise WebhookCreationError
           end
-        rescue WebhookCreationError
-          
         end
+      rescue WebhookCreationError
+        @repository.errors.add(:access_token, :invalid)
+
       end
 
       def create_github_webhook_if_needed
