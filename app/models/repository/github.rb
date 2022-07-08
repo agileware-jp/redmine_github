@@ -9,7 +9,7 @@ class Repository::Github < ::Repository::Git
   accepts_nested_attributes_for :github_credential
 
   safe_attributes 'access_token', 'webhook_secret'
-  validates_presence_of :url
+  validates :url, presence: true, format: { with: REPOSITORY_URI_REGEXP }
   validates_presence_of :access_token
   validates_presence_of :webhook_secret
 
