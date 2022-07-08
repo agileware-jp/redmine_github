@@ -24,6 +24,8 @@ module RedmineGithub
         }, only: :create
       end
 
+      private
+
       def repository_webhook_url
         use_hostname = ::Setting.plugin_redmine_github['webhook_use_hostname'].to_s
         return redmine_github_webhook_url(repository_id: @repository) unless use_hostname == '1'
