@@ -9,7 +9,7 @@ module RedmineGithub
       included do
         helper GithubHelper
 
-        after_action :create_github_web_hook_if_needed, only: :create
+        around_action :show_error_if_webhook_creation_error, only: :create
       end
 
       private
@@ -21,7 +21,7 @@ module RedmineGithub
         "#{::Setting.protocol}://#{::Setting.host_name}#{webhook_path}"
       end
 
-      def create_github_web_hook_if_needed
+      def create_github_webhook_if_needed
         return if !@repository.is_a?(Repository::Github) || @repository.invalid?
 
         RedmineGithub::GithubApi::Rest::Webhook.new(@repository).create(
@@ -33,6 +33,27 @@ module RedmineGithub
           events: %w[pull_request pull_request_review push status],
           active: true
         )
+      end
+
+      def show_error_if_webhook_creation_error
+        ActiveRecord::Base.transaction do
+          yield
+          create_github_webhook_if_needed
+        end
+      rescue RedmineGithub::GithubApi::Rest::Error => e
+        logger.info("#{e.class}: #{e.message}")
+        logger.debug do
+          backtrace_lines = e.backtrace.map { |l| "| #{l}\n" }
+          "backtrace:\n#{backtrace_lines.join}"
+        end
+
+        @repository.errors.add(:base, :failed_to_create_webhook)
+
+        # revert redirect_to rendering
+        set_response!(self.class.make_response!(request))
+        @_response_body = nil
+
+        render(action: 'new')
       end
     end
   end

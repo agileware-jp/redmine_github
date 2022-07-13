@@ -5,3 +5,11 @@ ja:
   label_github_webhook_secret: Webhook Secret
   setting_redmine_github_title: Redmine Github プラグイン設定
   setting_webhook_use_hostname: Webhookリクエストでhostnameを使います
+  text_github_repository_note: "例: https://github.com/[owner]/[repository name].git"
+  activerecord:
+    errors:
+      models:
+        repository/github:
+          attributes:
+            base:
+              failed_to_create_webhook: GitHub.comへの接続に失敗しました。アクセストークンとURLを確認してください。
