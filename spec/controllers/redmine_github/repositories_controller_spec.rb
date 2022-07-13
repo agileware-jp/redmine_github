@@ -10,12 +10,14 @@ RSpec.describe RepositoriesController, type: :controller do
 
   before do
     login_as(admin)
-    allow_any_instance_of(RepositoriesController).to receive(:authorize) { true }
-    # interupt Github webhook API POST requests
-    allow_any_instance_of(RedmineGithub::GithubApi::Rest::Client).to receive(:post) { nil }
   end
 
-  context 'create repository' do
+  describe '#create' do
+    subject(:call) do
+      fixed_params = Rails::VERSION::MAJOR < 5 ? params : { params: params }
+      post(:create, **fixed_params)
+    end
+
     let(:params) do
       {
         project_id: project.id,
@@ -28,13 +30,20 @@ RSpec.describe RepositoriesController, type: :controller do
       }
     end
 
-    it 'should send webhooks API request' do
-      expect_any_instance_of(RedmineGithub::GithubApi::Rest::Webhook).to receive(:create)
+    around do |example|
       Repository::Github.skip_callback(:create, :after, :bare_clone)
-      fixed_params = Rails::VERSION::MAJOR < 5 ? params : { params: params }
-      expect(post :create, **fixed_params).to redirect_to(settings_project_path(project, tab: :repositories))
-      # post project_repositories_path(project), params: params
-      Repository::Github.set_callback(:create, :after, :bare_clone)
+      begin
+        example.run
+      ensure
+        Repository::Github.set_callback(:create, :after, :bare_clone)
+      end
+    end
+
+    context 'create repository' do
+      it 'should send webhooks API request' do
+        expect_any_instance_of(RedmineGithub::GithubApi::Rest::Webhook).to receive(:create)
+        expect(call).to redirect_to(settings_project_path(project, tab: :repositories))
+      end
     end
   end
 end
