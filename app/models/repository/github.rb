@@ -18,12 +18,7 @@ class Repository::Github < ::Repository::Git
   after_update :update_remote_url
 
   def self.human_attribute_name(attribute_key_name, *args)
-    if attribute_key_name.to_s == 'url'
-      # omit https://github.com/redmine/redmine/blob/5.0.2/app/models/repository/git.rb#L30-L31
-      superclass.superclass.__send__(__method__, attribute_key_name, *args)
-    else
-      super
-    end
+    Repository.human_attribute_name(attribute_key_name, *args)
   end
 
   def self.scm_adapter_class
