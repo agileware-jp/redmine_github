@@ -12,7 +12,7 @@ RSpec.describe RepositoriesController, type: :controller do
     login_as(admin)
   end
 
-  context 'create repository' do
+  describe '#create' do
     subject(:call) do
       fixed_params = Rails::VERSION::MAJOR < 5 ? params : { params: params }
       post(:create, **fixed_params)
@@ -39,9 +39,11 @@ RSpec.describe RepositoriesController, type: :controller do
       end
     end
 
-    it 'should send webhooks API request' do
-      expect_any_instance_of(RedmineGithub::GithubApi::Rest::Webhook).to receive(:create)
-      expect(call).to redirect_to(settings_project_path(project, tab: :repositories))
+    context 'create repository' do
+      it 'should send webhooks API request' do
+        expect_any_instance_of(RedmineGithub::GithubApi::Rest::Webhook).to receive(:create)
+        expect(call).to redirect_to(settings_project_path(project, tab: :repositories))
+      end
     end
   end
 end
