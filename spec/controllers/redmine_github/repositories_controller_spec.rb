@@ -25,13 +25,19 @@ RSpec.describe RepositoriesController, type: :controller do
       }
     end
 
+    around do |example|
+      Repository::Github.skip_callback(:create, :after, :bare_clone)
+      begin
+        example.run
+      ensure
+        Repository::Github.set_callback(:create, :after, :bare_clone)
+      end
+    end
+
     it 'should send webhooks API request' do
       expect_any_instance_of(RedmineGithub::GithubApi::Rest::Webhook).to receive(:create)
-      Repository::Github.skip_callback(:create, :after, :bare_clone)
       fixed_params = Rails::VERSION::MAJOR < 5 ? params : { params: params }
       expect(post :create, **fixed_params).to redirect_to(settings_project_path(project, tab: :repositories))
-      # post project_repositories_path(project), params: params
-      Repository::Github.set_callback(:create, :after, :bare_clone)
     end
   end
 end
