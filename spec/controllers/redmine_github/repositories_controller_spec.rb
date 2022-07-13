@@ -10,9 +10,6 @@ RSpec.describe RepositoriesController, type: :controller do
 
   before do
     login_as(admin)
-    allow_any_instance_of(RepositoriesController).to receive(:authorize) { true }
-    # interupt Github webhook API POST requests
-    allow_any_instance_of(RedmineGithub::GithubApi::Rest::Client).to receive(:post) { nil }
   end
 
   context 'create repository' do
