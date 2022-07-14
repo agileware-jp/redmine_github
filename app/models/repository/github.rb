@@ -18,6 +18,10 @@ class Repository::Github < ::Repository::Git
   after_update :update_remote_url
 
   def self.human_attribute_name(attribute_key_name, *args)
+    # Parent class method replaces attribute name and determines result:
+    # https://github.com/redmine/redmine/blob/5.0.2/app/models/repository/git.rb#L30-L31
+    #
+    # But this class does not need it. So, call grand parent class's.
     Repository.human_attribute_name(attribute_key_name, *args)
   end
 
