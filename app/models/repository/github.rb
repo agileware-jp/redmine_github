@@ -3,17 +3,27 @@
 require_dependency 'repository/git'
 
 class Repository::Github < ::Repository::Git
+  REPOSITORY_URI_REGEXP = %r{\Ahttps://github\.com/(.+)/(.+)\.git}
+
   has_one :github_credential, foreign_key: :repository_id, dependent: :destroy
   accepts_nested_attributes_for :github_credential
 
   safe_attributes 'access_token', 'webhook_secret'
-  validates_presence_of :url
+  validates :url, presence: true, format: { with: REPOSITORY_URI_REGEXP }
   validates_presence_of :access_token
   validates_presence_of :webhook_secret
 
   delegate :bare_clone, :fetch_remote, :update_remote_url, to: :scm
   after_create :bare_clone
   after_update :update_remote_url
+
+  def self.human_attribute_name(attribute_key_name, *args)
+    # Parent class method replaces attribute name and determines result:
+    # https://github.com/redmine/redmine/blob/5.0.2/app/models/repository/git.rb#L30-L31
+    #
+    # But this class does not need it. So, call grand parent class's.
+    Repository.human_attribute_name(attribute_key_name, *args)
+  end
 
   def self.scm_adapter_class
     RedmineGithub::Scm::Adapters::GithubAdapter
@@ -68,6 +78,6 @@ class Repository::Github < ::Repository::Git
   end
 
   def scan_url
-    @owner, @repo = url.to_s.scan(%r{https://github.com/(.+)/(.+).git}).flatten
+    @owner, @repo = url.to_s.scan(REPOSITORY_URI_REGEXP).flatten
   end
 end

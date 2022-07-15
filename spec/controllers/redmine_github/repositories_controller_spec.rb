@@ -45,5 +45,17 @@ RSpec.describe RepositoriesController, type: :controller do
         expect(call).to redirect_to(settings_project_path(project, tab: :repositories))
       end
     end
+
+    context 'when failed to create webhook on GitHub.com' do
+      it 'should not create Repository record' do
+        unauthorized_response = Net::HTTPResponse.new('1.1', '401', 'Unauthorized')
+        allow_any_instance_of(RedmineGithub::GithubApi::Rest::Client).to(
+          receive(:post).
+            and_raise(RedmineGithub::GithubApi::Rest::Error, unauthorized_response)
+        )
+        expect { call }.not_to(change(Repository, :count))
+        expect(response).to have_http_status(:success)
+      end
+    end
   end
 end
