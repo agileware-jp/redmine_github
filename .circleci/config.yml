@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  redmine-plugin: agileware-jp/redmine-plugin@2.2.0
+  redmine-plugin: agileware-jp/redmine-plugin@2.3.0
   rubocop:
     executors:
       rubocop-executor:
@@ -9,9 +9,9 @@ orbs:
           ruby_version:
             description: version of Ruby
             type: string
-            default: latest
+            default: '2.7'
         docker:
-          - image: circleci/ruby:<<parameters.ruby_version>>
+          - image: cimg/ruby:<<parameters.ruby_version>>
     commands:
       install-rubocop:
         parameters:
