@@ -129,7 +129,7 @@ workflows:
           <<: *ignore_trial
       - rspec:
           name: RSpec on oldest versions with MySQL
-          redmine_version: '4.0.9'
+          redmine_version: '4.1.7'
           ruby_version: '2.6'
           db: mysql
           db_version: '5.7-ram'
