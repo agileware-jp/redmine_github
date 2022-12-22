@@ -124,7 +124,7 @@ workflows:
           <<: *ignore_trial
       - rspec:
           name: RSpec on newest versions with PostgreSQL
-          redmine_version: '5.0.1'
+          redmine_version: latest
           db: pg
           <<: *ignore_trial
       - rspec:
