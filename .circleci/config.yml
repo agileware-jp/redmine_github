@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  redmine-plugin: agileware-jp/redmine-plugin@2.3.0
+  redmine-plugin: agileware-jp/redmine-plugin@3.1.0
   rubocop:
     executors:
       rubocop-executor:
@@ -9,9 +9,9 @@ orbs:
           ruby_version:
             description: version of Ruby
             type: string
-            default: '2.7'
+            default: $RUBY_MAX_VERSION
         docker:
-          - image: cimg/ruby:<<parameters.ruby_version>>
+          - image: cimg/ruby:<< parameters.ruby_version >>
     commands:
       install-rubocop:
         parameters:
@@ -79,19 +79,13 @@ jobs:
     parameters:
       redmine_version:
         type: string
-      redmine_product:
-        type: string
-        default: 'redmine'
       ruby_version:
         type: string
-        default: 'latest'
       db:
         type: enum
         enum: ['mysql', 'pg']
-        default: pg
       db_version:
         type: string
-        default: 'latest-ram'
     executor:
       name: redmine-plugin/ruby-<< parameters.db >>
       ruby_version: << parameters.ruby_version >>
@@ -100,7 +94,6 @@ jobs:
       - checkout
       - redmine-plugin/download-redmine:
           version: << parameters.redmine_version >>
-          product: << parameters.redmine_product >>
       - redmine-plugin/install-self
       - redmine-plugin/generate-database_yml
       - redmine-plugin/bundle-install
@@ -108,6 +101,10 @@ jobs:
       - store_artifacts:
           path: redmine/tmp/capybara
           destination: screenshots
+
+default_context: &default_context
+  context:
+    - lychee-ci-environment
 
 ignore_trial: &ignore_trial
   filters:
@@ -120,22 +117,22 @@ workflows:
   test:
     jobs:
       - rubocop:
+          <<: *default_context
+          <<: *ignore_trial
           rubocop_config_path: ~/project/.rubocop.yml
-          <<: *ignore_trial
       - rspec:
-          name: RSpec on newest versions with PostgreSQL
-          redmine_version: latest
+          <<: *default_context
+          <<: *ignore_trial
+          name: RSpec on supported maximum versions with PostgreSQL
+          redmine_version: $REDMINE_MAX_VERSION
+          ruby_version: $RUBY_MAX_VERSION
           db: pg
-          <<: *ignore_trial
+          db_version: $POSTGRES_VERSION
       - rspec:
-          name: RSpec on oldest versions with MySQL
-          redmine_version: '4.1.7'
-          ruby_version: '2.6'
+          <<: *default_context
+          <<: *ignore_trial
+          name: RSpec on supported minimum versions with MySQL
+          redmine_version: $REDMINE_MIN_VERSION
+          ruby_version: $RUBY_MIN_VERSION
           db: mysql
-          db_version: '5.7-ram'
-          <<: *ignore_trial
-      - rspec:
-          name: Redmica 2
-          redmine_product: 'redmica'
-          redmine_version: '2.1.0'
-          <<: *ignore_trial
+          db_version: $MYSQL_VERSION
