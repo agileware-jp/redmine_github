@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  redmine-plugin: agileware-jp/redmine-plugin@2.2.0
+  redmine-plugin: agileware-jp/redmine-plugin@2.3.0
   rubocop:
     executors:
       rubocop-executor:
@@ -9,9 +9,9 @@ orbs:
           ruby_version:
             description: version of Ruby
             type: string
-            default: latest
+            default: '2.7'
         docker:
-          - image: circleci/ruby:<<parameters.ruby_version>>
+          - image: cimg/ruby:<<parameters.ruby_version>>
     commands:
       install-rubocop:
         parameters:
@@ -124,13 +124,13 @@ workflows:
           <<: *ignore_trial
       - rspec:
           name: RSpec on newest versions with PostgreSQL
-          redmine_version: '5.0.1'
+          redmine_version: latest
           db: pg
           <<: *ignore_trial
       - rspec:
           name: RSpec on oldest versions with MySQL
-          redmine_version: '4.0.1'
-          ruby_version: '2.4.5'
+          redmine_version: '4.1.7'
+          ruby_version: '2.6'
           db: mysql
           db_version: '5.7-ram'
           <<: *ignore_trial
