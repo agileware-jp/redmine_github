@@ -51,10 +51,14 @@ For given project, go to its `Settings->Repositories->New Repository` form and e
 
 - **SCM:** `Github`
 - **Main repository:** *(Optional)*
-- **Identifier:** *Put a unique repository identifier, such as the Github repository's* `Repository name`.
-- **URL:** *GitHub repository's* `HTTPS URL` *; see ([clone address](https://docs.github.com/en/get-started/getting-started-with-git/about-remote-repositories#about-remote-repositories)).*
-- **Access Token:** *See [personal access token](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line).*
-- **Webhook Secret:** *See [webhook secret](https://developer.github.com/webhooks/securing/).*
+- **Identifier:** `YOUR-UNIQUE-IDENTIFIER`
+  - *For example, you can simply use your Github repository's* `Repository name` *as its **Identifier** in Redmine.*
+- **URL:** `https://github.com/USER|ORGANIZATION/YOUR-REPOSITORY-NAME`
+  - *More info: [Clone address](https://docs.github.com/en/get-started/getting-started-with-git/about-remote-repositories#about-remote-repositories)*
+- **Access Token:** `YOUR-ACCESS-TOKEN`
+  - *More info: [Personal access token](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line)*
+- **Webhook Secret:** `YOUR-WEBHOOK-SECRET`
+  - *More info: [Webhook secret](https://developer.github.com/webhooks/securing/)*
 
 After pressing `Create` button, a bare-clone of your Github repository will be created inside your Redmine's install directory, at `{LOCAL_REDMINE_DIRECTORY}/repositories/`.
 
@@ -69,8 +73,9 @@ Now use the `Edit` or `Delete` links to take note of the **Repository ID**. You 
   - *For example* `https://redmine.org/redmine_github/1/webhook`
     - *Note: replace `:repository_id` with the **Repository ID** you noted in the previous step.*
 - **Content type:** `application/json`
-- **Secret:** *Put the same Webhook Secret defined in Redmine project's Repository settings*
-- **Which events would you like to trigger this webhook?** `Let me select individual events.`
+- **Secret:** `YOUR-WEBHOOK-SECRET`
+  - *Use the same **Webhook Secret** defined in previous step when configuring your Redmine project's Repository.*
+- **Which events would you like to trigger this webhook?** `Let me select individual events`
   - `Pull requests`
   - `Pull request reviews`
   - `Pull request review comments`
