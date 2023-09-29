@@ -59,6 +59,8 @@ For given project, go to its `Settings->Repositories->New Repository` form and e
   - *More info: [Personal access token](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line)*
 - **Webhook Secret:** `YOUR-WEBHOOK-SECRET`
   - *More info: [Webhook secret](https://developer.github.com/webhooks/securing/)*
+- **Path encoding:** *(Optional)*
+- **Report last commit for files and directories:** *(Optional)*
 
 After pressing `Create` button, a bare-clone of your Github repository will be created inside your Redmine's install directory, at `{LOCAL_REDMINE_DIRECTORY}/repositories/`.
 
