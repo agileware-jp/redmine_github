@@ -26,6 +26,11 @@ RSpec.describe 'POST /redmine_github/webhook/' do
     let(:signature) { 'sha256=' + OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), repository.webhook_secret, params) }
     let(:repository) { create(:github_repository) }
 
+    context 'event type with commit_comment' do
+      let(:event) { 'commit_comment' }
+      include_examples 'call handler with correct arguments and return http ok'
+    end
+    
     context 'event type with pull_request' do
       let(:event) { 'pull_request' }
       include_examples 'call handler with correct arguments and return http ok'
@@ -33,6 +38,11 @@ RSpec.describe 'POST /redmine_github/webhook/' do
 
     context 'event type with pull_request_review' do
       let(:event) { 'pull_request_review' }
+      include_examples 'call handler with correct arguments and return http ok'
+    end
+
+    context 'event type with pull_request_review_comment' do
+      let(:event) { 'pull_request_review_comment' }
       include_examples 'call handler with correct arguments and return http ok'
     end
 
