@@ -7,7 +7,7 @@ RSpec.describe RedmineGithub::GithubApi::Rest::Webhook do
 
   let(:project) { create :project }
   let(:webhook_url) { "https://host.site/project/#{project.id}/hook" }
-  let(:events) { %w[pull_request pull_request_review push status] }
+  let(:events) { %w[pull_request pull_request_review pull_request_review_comment push status] }
   let(:repository) { create :github_repository, url: 'https://github.com/company/repo.git' }
   let(:new_webhook) { RedmineGithub::GithubApi::Rest::Webhook.new(repository) }
   let(:params) do

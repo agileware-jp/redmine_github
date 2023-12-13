@@ -64,6 +64,19 @@ RSpec.describe RedmineGithub::PullRequestHandler do
     }
   end
 
+  describe '.handle pull_request_review_comment' do
+    subject { RedmineGithub::PullRequestHandler.handle(repository, 'pull_request_review_comment', payload) }
+
+    let(:payload) { {} }
+
+    it {
+      expect(RedmineGithub::PullRequestHandler).to(
+        receive(:handle_pull_request).with(repository, payload)
+      )
+      subject
+    }
+  end
+  
   describe '.handle push' do
     subject { RedmineGithub::PullRequestHandler.handle(repository, 'push', payload) }
 
