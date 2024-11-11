@@ -30,7 +30,8 @@ class PullRequest < ActiveRecord::Base
   end
 
   def repository
-    @repository ||= Repository::Github.find_by(url: "https://github.com/#{repo_owner}/#{repo_name}.git")
+    repository_uri = RedmineGithub.host_uri + "#{repo_owner}/#{repo_name}.git"
+    @repository ||= Repository::Github.find_by(url: repository_uri.to_s)
   end
 
   def sync
@@ -46,6 +47,6 @@ class PullRequest < ActiveRecord::Base
   private
 
   def scan_url
-    @repo_owner, @repo_name, @number = url.to_s.scan(%r{\Ahttps://github.com/(.+)/(.+)/pull/(\d+)\z}).flatten
+    @repo_owner, @repo_name, @number = url.to_s.scan(%r{\A#{Regexp.escape(RedmineGithub.host_uri)}/(.+)/(.+)/pull/(\d+)\z}).flatten
   end
 end

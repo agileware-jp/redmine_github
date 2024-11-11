@@ -6,7 +6,7 @@ require 'graphql/client/http'
 module RedmineGithub
   module GithubApi
     module Graphql
-      END_POINT = 'https://api.github.com/graphql'
+      END_POINT = (RedmineGithub.api_base_uri + 'graphql').to_s
 
       FETCH_PR_QUERY_BASE = <<-'GRAPHQL'.strip_heredoc
         query($number: Int!, $repo_owner: String!, $repo_name: String!) {
