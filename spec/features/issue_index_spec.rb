@@ -2,7 +2,7 @@
 
 require File.expand_path('../rails_helper', __dir__)
 
-RSpec.describe 'Issue Index Page' do
+RSpec.feature 'Issue Index Page', type: :feature do
   let!(:issue_with_pr) do
     create(
       :issue,

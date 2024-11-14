@@ -2,7 +2,7 @@
 
 require File.expand_path('../rails_helper', __dir__)
 
-RSpec.describe 'POST /redmine_github/webhook/' do
+RSpec.describe 'POST /redmine_github/webhook/', type: :request do
   describe 'handle' do
     shared_examples 'call handler with correct arguments and return http ok' do
       it {
