@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  redmine-plugin: agileware-jp/redmine-plugin@3.5.0
+  redmine-plugin: agileware-jp/redmine-plugin@3.7.0
   rubocop:
     executors:
       rubocop-executor:
@@ -75,6 +75,36 @@ jobs:
           gem-name: rubocop-performance
       - rubocop/run-cops:
           rubocop_option: --fail-level E --display-only-fail-level-offenses -f s -c << parameters.rubocop_config_path >> << parameters.rubocop_files >>
+  rspec-git-url:
+    parameters:
+      redmine_git_url:
+        type: string
+      redmine_version:
+        type: string
+      ruby_version:
+        type: string
+      db:
+        type: enum
+        enum: ['mysql', 'pg']
+      db_version:
+        type: string
+    executor:
+      name: redmine-plugin/ruby-<< parameters.db >>
+      ruby_version: << parameters.ruby_version >>
+      db_version: << parameters.db_version >>
+    steps:
+      - checkout
+      - redmine-plugin/download-redmine-git-url:
+          git_url: << parameters.redmine_git_url >>
+          version: << parameters.redmine_version >>
+      - redmine-plugin/install-self
+      - redmine-plugin/generate-database_yml
+      - redmine-plugin/bundle-install
+      - redmine-plugin/migrate-without-plugins
+      - redmine-plugin/rspec
+      - store_artifacts:
+          path: redmine/tmp/capybara
+          destination: screenshots
   rspec:
     parameters:
       redmine_version:
@@ -120,6 +150,15 @@ workflows:
           <<: *default_context
           <<: *ignore_trial
           rubocop_config_path: ~/project/.rubocop.yml
+      - rspec-git-url:
+          !!merge <<: *default_context
+          !!merge <<: *ignore_trial
+          name: RSpec on Redmine git with PostgreSQL
+          redmine_git_url: $REDMINE_GIT_URL
+          redmine_version: $REDMINE_GIT_REVISION
+          ruby_version: $REDMINE_GIT_RUBY_VERSION
+          db: pg
+          db_version: $POSTGRES_VERSION
       - rspec:
           <<: *default_context
           <<: *ignore_trial
