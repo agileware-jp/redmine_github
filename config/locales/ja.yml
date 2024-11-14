@@ -7,6 +7,9 @@ ja:
   setting_webhook_use_hostname: Webhookリクエストでhostnameを使います
   text_github_repository_note: "例: https://github.com/[owner]/[repository name].git"
   activerecord:
+    attributes:
+      pull_request:
+        url: URL
     errors:
       models:
         repository/github:

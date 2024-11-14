@@ -7,6 +7,9 @@ en:
   setting_webhook_use_hostname: Use Redmine hostname in webhook requests
   text_github_repository_note: "Example: https://github.com/[owner]/[repository name].git"
   activerecord:
+    attributes:
+      pull_request:
+        url: URL
     errors:
       models:
         repository/github:
