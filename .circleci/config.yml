@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  redmine-plugin: agileware-jp/redmine-plugin@3.5.0
+  redmine-plugin: agileware-jp/redmine-plugin@3.8.0
   rubocop:
     executors:
       rubocop-executor:
@@ -18,7 +18,7 @@ orbs:
           rubocop_version:
             description: version of Rubocop
             type: string
-            default: ''
+            default: ""
         steps:
           - run:
               name: install rubocop << parameters.rubocop_version >>
@@ -48,7 +48,7 @@ orbs:
           rubocop_option:
             description: CLI option for rubocop
             type: string
-            default: '--format simple'
+            default: "--format simple"
         steps:
           - run: rubocop << parameters.rubocop_option >>
 
@@ -61,12 +61,12 @@ jobs:
       rubocop_files:
         description: files to check by rubocop
         type: string
-        default: '~/project'
+        default: "~/project"
     executor: rubocop/rubocop-executor
     steps:
       - checkout
       - rubocop/install-rubocop:
-          rubocop_version: '~> 0.93.1'
+          rubocop_version: "~> 0.93.1"
       - rubocop/install-cop-from-gem:
           gem-name: rubocop-rails
       - rubocop/install-cop-from-gem:
@@ -75,6 +75,36 @@ jobs:
           gem-name: rubocop-performance
       - rubocop/run-cops:
           rubocop_option: --fail-level E --display-only-fail-level-offenses -f s -c << parameters.rubocop_config_path >> << parameters.rubocop_files >>
+  rspec-git-url:
+    parameters:
+      redmine_git_url:
+        type: string
+      redmine_version:
+        type: string
+      ruby_version:
+        type: string
+      db:
+        type: enum
+        enum: ["mysql", "pg"]
+      db_version:
+        type: string
+    executor:
+      name: redmine-plugin/ruby-<< parameters.db >>
+      ruby_version: << parameters.ruby_version >>
+      db_version: << parameters.db_version >>
+    steps:
+      - checkout
+      - redmine-plugin/download-redmine-git-url:
+          git_url: << parameters.redmine_git_url >>
+          version: << parameters.redmine_version >>
+      - redmine-plugin/install-self
+      - redmine-plugin/generate-database_yml
+      - redmine-plugin/bundle-install
+      - redmine-plugin/migrate-without-plugins
+      - redmine-plugin/rspec
+      - store_artifacts:
+          path: redmine/tmp/capybara
+          destination: screenshots
   rspec:
     parameters:
       redmine_version:
@@ -83,7 +113,7 @@ jobs:
         type: string
       db:
         type: enum
-        enum: ['mysql', 'pg']
+        enum: ["mysql", "pg"]
       db_version:
         type: string
     executor:
@@ -120,6 +150,15 @@ workflows:
           <<: *default_context
           <<: *ignore_trial
           rubocop_config_path: ~/project/.rubocop.yml
+      - rspec-git-url:
+          !!merge <<: *default_context
+          !!merge <<: *ignore_trial
+          name: RSpec on Redmine git with PostgreSQL
+          redmine_git_url: $REDMINE_GIT_URL
+          redmine_version: $REDMINE_GIT_REVISION
+          ruby_version: $REDMINE_GIT_RUBY_VERSION
+          db: pg
+          db_version: $POSTGRES_VERSION
       - rspec:
           <<: *default_context
           <<: *ignore_trial
