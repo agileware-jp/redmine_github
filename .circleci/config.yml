@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  redmine-plugin: agileware-jp/redmine-plugin@3.7.0
+  redmine-plugin: agileware-jp/redmine-plugin@3.8.0
   rubocop:
     executors:
       rubocop-executor:
@@ -18,7 +18,7 @@ orbs:
           rubocop_version:
             description: version of Rubocop
             type: string
-            default: ''
+            default: ""
         steps:
           - run:
               name: install rubocop << parameters.rubocop_version >>
@@ -48,7 +48,7 @@ orbs:
           rubocop_option:
             description: CLI option for rubocop
             type: string
-            default: '--format simple'
+            default: "--format simple"
         steps:
           - run: rubocop << parameters.rubocop_option >>
 
@@ -61,12 +61,12 @@ jobs:
       rubocop_files:
         description: files to check by rubocop
         type: string
-        default: '~/project'
+        default: "~/project"
     executor: rubocop/rubocop-executor
     steps:
       - checkout
       - rubocop/install-rubocop:
-          rubocop_version: '~> 0.93.1'
+          rubocop_version: "~> 0.93.1"
       - rubocop/install-cop-from-gem:
           gem-name: rubocop-rails
       - rubocop/install-cop-from-gem:
@@ -85,7 +85,7 @@ jobs:
         type: string
       db:
         type: enum
-        enum: ['mysql', 'pg']
+        enum: ["mysql", "pg"]
       db_version:
         type: string
     executor:
@@ -113,7 +113,7 @@ jobs:
         type: string
       db:
         type: enum
-        enum: ['mysql', 'pg']
+        enum: ["mysql", "pg"]
       db_version:
         type: string
     executor:
