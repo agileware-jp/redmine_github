@@ -30,7 +30,7 @@ module RedmineGithub
             content_type: 'json',
             secret: @repository.webhook_secret
           },
-          events: %w[pull_request pull_request_review push status],
+          events: %w[commit_comment pull_request pull_request_review pull_request_review_comment push status],
           active: true
         )
       end

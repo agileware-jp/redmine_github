@@ -10,7 +10,8 @@ module RedmineGithub
     def dispatch_event
       event = request.headers['x-github-event']
       case event
-      when 'pull_request', 'pull_request_review', 'push', 'status'
+      # As documented in: https://docs.github.com/en/webhooks/webhook-events-and-payloads
+      when 'commit_comment', 'pull_request', 'pull_request_review', 'pull_request_review_comment', 'push', 'status'
         PullRequestHandler.handle(@repository, event, params)
         head :ok
       else

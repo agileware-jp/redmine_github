@@ -26,6 +26,11 @@ RSpec.describe 'POST /redmine_github/webhook/', type: :request do
     let(:signature) { 'sha256=' + OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), repository.webhook_secret, params) }
     let(:repository) { create(:github_repository) }
 
+    context 'event type with commit_comment' do
+      let(:event) { 'commit_comment' }
+      include_examples 'call handler with correct arguments and return http ok'
+    end
+    
     context 'event type with pull_request' do
       let(:event) { 'pull_request' }
       include_examples 'call handler with correct arguments and return http ok'
@@ -33,6 +38,11 @@ RSpec.describe 'POST /redmine_github/webhook/', type: :request do
 
     context 'event type with pull_request_review' do
       let(:event) { 'pull_request_review' }
+      include_examples 'call handler with correct arguments and return http ok'
+    end
+
+    context 'event type with pull_request_review_comment' do
+      let(:event) { 'pull_request_review_comment' }
       include_examples 'call handler with correct arguments and return http ok'
     end
 
@@ -51,7 +61,7 @@ RSpec.describe 'POST /redmine_github/webhook/', type: :request do
       include_examples 'ignored and return http ok'
     end
 
-    context 'signure is wrong' do
+    context 'signature is wrong' do
       it {
         headers = { 'x-hub-signature-256' => 'bad-signature', 'x-github-event' => 'status', content_type: :json }
         post redmine_github_webhook_path(repository_id: repository.id.to_s, format: :json), params: params, headers: headers
