@@ -3,7 +3,7 @@
 require_dependency 'repository/git'
 
 class Repository::Github < ::Repository::Git
-  REPOSITORY_URI_REGEXP = %r{\Ahttps://github\.com/(.+)/(.+)\.git}
+  REPOSITORY_URI_REGEXP = %r{\Ahttps://[^/]*github[^/]*/(.+)/(.+)\.git}
 
   has_one :github_credential, foreign_key: :repository_id, dependent: :destroy
   accepts_nested_attributes_for :github_credential
