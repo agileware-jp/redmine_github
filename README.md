@@ -1,10 +1,12 @@
 # Redmine GitHub plugin
 
-_redmine_github_ is a Redmine plugin for connecting a local Redmine installation to a remote GitHub repository. The plugin allows to:
+_redmine_github_ is a Redmine plugin for connecting a local Redmine installation to a remote GitHub repository.
 
-- Syncronize remote GitHub repository to a local Git one - all Git-related Redmine features can be used
-- Attach pull request (PR) status icons to issues - will change in real time, when pul request status change - created, approved, merged etc.
-- Connect commit comment to issues via [Redmine commit comments keywords](<(https://www.redmine.org/projects/redmine/wiki/RedmineSettings#Referencing-issues-in-commit-messages)>)
+The plugin allows to:
+
+- Syncronize remote GitHub repository to a local Git one. All Git-related Redmine features can be used!
+- Attach pull request (PR) status icons to issues. These will change in real time, when pull request status change: created, approved, merged, etc.
+- Connect git commit comments to issues via Redmine's [referencing issues in commit messages](https://www.redmine.org/projects/redmine/wiki/RedmineSettings#Referencing-issues-in-commit-messages).
 
 ## Getting started
 
@@ -14,16 +16,17 @@ _redmine_github_ is a Redmine plugin for connecting a local Redmine installation
 cd {LOCAL_REDMINE_DIRECTORY}/plugins
 ```
 
-#### From downloaded release archive file
 
-```shell
-tar xvzpf redmine_github....
-```
-
-#### or via Git clone
+#### via Git clone
 
 ```shell
 git clone https://github.com/agileware-jp/redmine_github.git
+```
+
+#### or from downloaded release archive file
+
+```shell
+tar xvzpf redmine_github....
 ```
 
 #### Install gems and migrate the database
@@ -34,37 +37,57 @@ bundle install
 bundle exec rake redmine:plugins:migrate
 ```
 
-#### Restart you Redmine
+#### Restart your Redmine
 
-After restart, also check if plugin is listed in the installed Redmine plugins list - _(Administration|Plugins)_
+After restarting check _redmine_github_ plugin is listed in `Administration->Plugins`.
 
-### 2. Add the repository to Redmine
+### 2. Enable Github as an SCM
 
-For given project, in \_(Settings|Repositories|New Repository) form enter:
+As per [Redmine documentation](https://www.redmine.org/projects/redmine/wiki/RedmineRepositories), enable `Github` as an SCM you wish to use globally in `Administration->Settings->Repositories->Enabled SCM`.
 
-- _SCM_ - **Github**
-- _Identifier_ - unique repository identifier
-- _URL_ - GitHub repository HTTPS URL ([clone address](https://docs.github.com/en/get-started/getting-started-with-git/about-remote-repositories#about-remote-repositories), starting with `https://`)
-- _Access Token_ - [personal access token](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line)
-- _Webhook Secret_ - [webhook secret](https://developer.github.com/webhooks/securing/)
+### 3. Add a Github repository to a Redmine project
 
-After pressing _'Create'_ button, bare-clone repository will be created inside your Redmine install directory - `{LOCAL_REDMINE_DIRECTORY}/repositories/` path.
+For given project, go to its `Settings->Repositories->New Repository` form and enter:
 
-> Note the **repository ID** in the _'Edit'_ and _'Delete'_ links - you will need this for the next step (webhook url)
+- **SCM:** `Github`
+- **Main repository:** *(Optional)*
+- **Identifier:** `YOUR-UNIQUE-IDENTIFIER`
+  - *For example, you can simply use your Github repository's* `Repository name` *as its **Identifier** in Redmine.*
+- **URL:** `https://github.com/USER|ORGANIZATION/YOUR-REPOSITORY-NAME`
+  - *More info: [Clone address](https://docs.github.com/en/get-started/getting-started-with-git/about-remote-repositories#about-remote-repositories)*
+- **Access Token:** `YOUR-ACCESS-TOKEN`
+  - *More info: [Personal access token](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line)*
+- **Webhook Secret:** `YOUR-WEBHOOK-SECRET`
+  - *More info: [Webhook secret](https://developer.github.com/webhooks/securing/)*
+- **Path encoding:** *(Optional)*
+- **Report last commit for files and directories:** *(Optional)*
 
-### 3. Connecting GitHub to Redmine
+After pressing `Create` button, a bare-clone of your Github repository will be created inside your Redmine's install directory, at `{LOCAL_REDMINE_DIRECTORY}/repositories/`.
 
-1. Go to the repository _Settings_ interface on GitHub.
-2. Under _Webhooks_ add a new webHook:
+Now use the `Edit` or `Delete` links to take note of the **Repository ID**. You will need this ID in the next step to configure the webhook URL.
 
-- The _Payload URL_ needs to be of the format: `[redmine_url]/redmine_github/:repository_id/webhook` (for example `http://redmine.example.com/redmine_github/1/webhook`). Repository ID is the one of the **created in the previous step repository**
-- _Content type_: **application/json**
-- _Secret_: **same as Webhook Secret inside you Redmine repository settings**
-- _Which events would you like to trigger this webhook?_ - _Pull requests, Pull request reviews, Pull request review comments, Pushes, Statuses, Commit comments_
+### 4. Connect GitHub to Redmine
 
-### 4. Configure commit comments keywords
+1. Go to the Github repository's **Settings**
+2. Select **Webhooks** and click `Add webhook`
 
-In _(Administration|Settings)_ , _Repositories_ tab configure [commit comments keywords](https://www.redmine.org/projects/redmine/wiki/RedmineSettings#Referencing-issues-in-commit-messages).
+- **Payload URL:** `[redmine_url]/redmine_github/:repository_id/webhook`
+  - *For example* `https://redmine.org/redmine_github/1/webhook`
+    - *Note: replace `:repository_id` with the **Repository ID** you noted in the previous step.*
+- **Content type:** `application/json`
+- **Secret:** `YOUR-WEBHOOK-SECRET`
+  - *Use the same **Webhook Secret** defined in previous step when configuring your Redmine project's Repository.*
+- **Which events would you like to trigger this webhook?** `Let me select individual events`
+  - `Pull requests`
+  - `Pull request reviews`
+  - `Pull request review comments`
+  - `Pushes`
+  - `Statuses`
+  - `Commit comments`
+
+### 5. Configure commit comments keywords
+
+Use the `Administration->Settings->Repositories` tab to configure [commit comments keywords](https://www.redmine.org/projects/redmine/wiki/RedmineSettings#Referencing-issues-in-commit-messages).
 
 ## Documentation
 
@@ -72,7 +95,7 @@ Read [redmine_github plugin wiki pages](https://github.com/agileware-jp/redmine_
 
 ## License
 
-Copyright &copy; 2019 [Agileware Inc.](http://agileware.jp)
+Copyright &copy; 2023 [Agileware Inc.](http://agileware.jp)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
